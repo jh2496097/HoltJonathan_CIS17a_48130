@@ -20,17 +20,24 @@ const int COLS = 8;
 
 enum ObSpots {ONE = 1 , TWO = 2, THREE = 3, FOUR = 4, FIVE = 5};
 //diff objects to place on table
-const int object1 [TWO][TWO] = {1,1,1,1};
+const int object1 [TWO][TWO] = {1,1,
+                                1,1};
 const int object2 [ONE][THREE] = {1,1,1};
-const int object3 [FOUR][ONE] = {1,1,1,1};
-const int object4 [TWO][THREE] = {1,1,1,1,1,1};
-const int object5 [THREE][TWO] = {1,1,1,1,1,1};
-//struct Objects
-//{
-    //cant initialize in structures
-    //int ob1 [2][2] = {1,1,1,1};
-    //int ob2 [2][2] = {1,1,1,1};
-//};
+const int object3 [FOUR][ONE] = {1,
+                                 1,
+                                 1,
+                                 1};
+const int object4 [TWO][THREE] = {1,1,1,
+                                  1,1,1};
+const int object5 [THREE][TWO] = {1,1,
+                                  1,1,
+                                  1,1};
+struct UserObj
+{
+    int **ptr;
+    int rows;
+    int cols;
+};
 void outputBegin ();
 int randObject ();
 int **objectNum (int num);
@@ -39,36 +46,64 @@ int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
 void objtPlcmnt(int **tble, int spot);
+void objtPlcmnt(int **tble, int spot, int rowOb, int colOb);
+int **newTable (int **tble, int &pts);
+void spotChoice (int &spot, int col);
 
 int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS);
+    int **object;
     bool game;
     int spot;
-    int count = 0;
-    //suppose to be random num between 1 n 5
-    int num = 1;
+    int points = 0;
+    
     //begin function
     outputBegin ();
     outputTbl(table, ROWS, COLS);
     do
     {
-        int **object = objectNum (num);
-        cout << "Pick a spot to place object (1 to 8): " ;
-        cin >> spot;
-    /*while (spot < 1 || spot > 8){//{v > 100 || v <= 0)
-        cout << "Pick a spot between 1 and 8!!!" << endl;
-        cin >> spot;
-    }*/
-    //IMPORTANT BOUNDS CHECKING AND PLACEMENT
-    //first area checks spot choice compared to column size of object
-    //rest makes sure number is 1 - 8
-        while ((spot-1) + TWO > 8 || spot < 1 || spot > 8){
-            cout << "Over Bounds will occur!!!!" << endl;
-            cout << "Cannot place there please pick another:" << endl;
-            cin >> spot;
+        int num = randObject ();
+        switch (num)
+        {
+            case 1:
+                object = objectNum (num);
+                spotChoice (spot, TWO);
+                objtPlcmnt(table, spot, TWO, TWO);
+                destroy (object, TWO);
+                break;
+            case 2:
+                object = objectNum (num);
+                spotChoice (spot, THREE);
+                objtPlcmnt(table, spot, ONE, THREE);
+                destroy (object, ONE);
+                break;
+            case 3:
+                object = objectNum (num);
+                spotChoice (spot, ONE);
+                objtPlcmnt(table, spot, FOUR, ONE);
+                destroy (object, FOUR);
+                break;
+            case 4:
+                object = objectNum (num);
+                spotChoice (spot, THREE);
+                objtPlcmnt(table, spot, TWO, THREE);
+                destroy (object, TWO);
+                break;
+            case 5:
+                object = objectNum (num);
+                spotChoice (spot, TWO);
+                objtPlcmnt(table, spot, THREE, TWO);
+                destroy (object, THREE);
+                break;     
         }
-       objtPlcmnt(table, spot);
+        table = newTable (table, points);
+        cout << " YOUR CURRENT POINTS ARE : " << points << " KEEP GOING!!\n\n";
+        //int **object = objectNum (num);
+        //spotChoice (spot, TWO);
+        
+       //objtPlcmnt(table, spot);
+       //objtPlcmnt(table, spot, TWO, TWO);
      //object for any spot 1 - 8 only
        /*for (int k = 1; k < 9; k++)
        {
@@ -88,13 +123,15 @@ int main(int argc, char** argv) {
         //}
     
         outputTbl(table, ROWS, COLS);
-        destroy (object, TWO);
+        
         //checking if lost
         game = isOver(table);
-    }while(game == true);
+
+    }while(game != false);
     destroy(table, ROWS);
     
-    
+    cout << "GAME IS OVER !!!!!!" << endl;
+    cout << "Here is your final point count: " << points << endl;
     return 0;
 }
 void outputTbl(int **ptr, int rows, int cols)
@@ -242,17 +279,68 @@ int **objectNum (int num)
            }
         }
     }
-    /*if (num == 3)
+    if (num == 3)
     {
-        object = object1;
+        object=new int*[FOUR];//rows
+        //creating 2D array
+        for (int i=0; i < FOUR;i++)//rows
+        {
+            object[i]=new int[ONE];//cols
+        }
+        //once created filling and outputting
+        cout << "\tThis is your object : " << endl  ;
+        for (int i=0; i <FOUR; i++){//rows
+            cout << "\t";
+           for(int j=0; j <ONE; j++){//cols
+              object[i][j]= 1;
+              cout << object1[i][j]  << "  ";
+              count++;
+              if (count == ONE)
+              {
+                  cout <<  endl;
+                  count = 0;
+              }
+           }
+        }
     }
     if (num == 4)
     {
-        objectNum = object4;
-        for (int i=0; i < TWO;i++)
+        object=new int*[TWO];//rows
+        //creating 2D array
+        for (int i=0; i < TWO;i++)//rows
         {
-           for(int j=0; j<TWO; j++)
-           {
+            object[i]=new int[THREE];//cols
+        }
+        //once created filling and outputting
+        cout << "\tThis is your object : " << endl  ;
+        for (int i=0; i < TWO; i++){//rows
+            cout << "\t";
+           for(int j=0; j < THREE; j++){//cols
+              object[i][j]= 1;
+              cout << object1[i][j]  << "  ";
+              count++;
+              if (count == THREE)
+              {
+                  cout <<  endl;
+                  count = 0;
+              }
+           }
+        }
+    }
+    if (num == 5)
+    {
+        object=new int*[THREE];//rows
+        //creating 2D array
+        for (int i=0; i < THREE;i++)//rows
+        {
+            object[i]=new int[TWO];//cols
+        }
+        //once created filling and outputting
+        cout << "\tThis is your object : " << endl  ;
+        for (int i=0; i < THREE; i++){//rows
+            cout << "\t";
+           for(int j=0; j < TWO; j++){//cols
+              object[i][j]= 1;
               cout << object1[i][j]  << "  ";
               count++;
               if (count == TWO)
@@ -263,13 +351,36 @@ int **objectNum (int num)
            }
         }
     }
-    if (num == 5)
+    /*if (num == 6)
     {
-        objectNum = object5;
-        for (int i=0; i < TWO;i++)
+        int rowsObj, colsObj;
+        cout << "You get to build your own object!!!" << endl;
+        cout << "Only can build a max 5x5 object so enter any numbers you"
+                << endl << "wish to build starting with rows then columns."
+                << endl << "Enter your rows: " << endl;
+        cin >> rowsObj;
+        while (rowsObj > 5 || rowsObj < 1){
+            cout << "Please enter a number between 1 and 5!!!" << endl;
+            cin >> rowsObj;
+        }
+        cout << "Enter your columns: " << endl;
+        cin >> colsObj;
+        while (colsObj > 5 || colsObj < 1){
+            cout << "Please enter a number between 1 and 5!!!" << endl;
+            cin >> colsObj;
+        }
+        UserObj **object =new int*[rowsObj];//rows
+        //creating 2D array
+        for (int i=0; i < rowsObj ;i++)//rows
         {
-           for(int j=0; j<TWO; j++)
-           {
+            object[i]=new int[colsObj];//cols
+        }
+        //once created filling and outputting
+        cout << "\tThis is your object : " << endl  ;
+        for (int i=0; i < THREE; i++){//rows
+            cout << "\t";
+           for(int j=0; j < TWO; j++){//cols
+              object[i][j]= 1;
               cout << object1[i][j]  << "  ";
               count++;
               if (count == TWO)
@@ -282,26 +393,17 @@ int **objectNum (int num)
     }*/
     return object;
 }
-void spotChoice (int **tbl, int **obj, int spot, int col){
-    cout << "Enter the column you wish to place the object:" << endl;
-    cin >> spot;
-    
-    while (spot + col >= 8 ){
-        cout << "Over Bounds will occur!!!!" << endl;
-        cout << "Cannot place there please pick another:" << endl;
+void spotChoice (int &spot, int col){
+    cout << "Pick a spot to place object (1 to 8): " ;
         cin >> spot;
-    }
-    //object1
-    if (spot == 3)
-    {
-        for (int i=ROWS-1; i >= ROWS-TWO; i--){
-            for(int j=0; j < TWO; j++){
-                tbl [i][j+spot-1] = 1;
-            }
+    //IMPORTANT BOUNDS CHECKING AND PLACEMENT
+    //first area checks spot choice compared to column size of object
+    //rest makes sure number is 1 - 8
+        while ((spot-1) + col > 8 || spot < 1 || spot > 8){
+            cout << "Over Bounds will occur!!!!" << endl;
+            cout << "Cannot place there please pick another:" << endl;
+            cin >> spot;
         }
-        /*for (int i = ROWS-1; i  >=0; i--)
-        for(int j = COLS-1; j >= 0; j--)*/
-    }
 }
 /*
  * check to see if a column is full and if it is then game over
@@ -316,51 +418,86 @@ bool isOver (int **tbl)
         if (tbl[i][col] == 1)
         {
             lose = false;
+            break;
         }
         else
             lose = true;
     }
     return lose;
 }
-void objtPlcmnt(int **tble, int spot)
+void objtPlcmnt(int **tble, int spot, int rowOb, int colOb)
 {
-    int counter =0;
-    //object for any spot 1 - 8 only
-       //for (int k = 1; k < 9; k++)
-       //{
-        //object1 only spot 6 only
-            //if (spot == k)
-            int j = spot-1;
-                //starting from bottom left to top
-                for (int i =ROWS-1 ; i >= 0; i--){
-                    //for (int j = spot-1; j < COLS; j++)
-                    //{
-                        
-                    
-                    if (tble [i][j] != 0){
-                        counter++;
-                        cout << "hi" << endl;
-                    }
+    //columns
+    int col = spot-1;
+    int row = ROWS;
+    //starting from bottom left to top
+    for (int i = ROWS-1; i >= 0; i--){
+       /* going to table then since object is size TWO looking at two spots to
+        * check for a 1. If there is a one in either spot i set rows to that
+        * spot to then tell me which row to start building from
+        */
+        for (int k = 0; k < colOb; k++)
+        {
+         if (tble[i][col+k] == 1 )//|| tble[i][col+1] == 1)//|| tble[i][col+1+1] == 1)// for three columns
+         {
+             //setting row
+             row = i;
+         }            
+        }
+     }
+    /*
+     * Going through with 2 loops to place a [TWO][TWO] object on the table
+     * with the right row to start from and checking to make sure top row is not
+     * a one or else i break from it to not cause bounds issues.
+     */
+     for (int i=row-1; i >= row-rowOb; i--){
+          for(int j=0; j < colOb; j++)  {
+              //checking if spot[col] top of table = 1 if so break from placing
+              //one
+              if (tble[0][col] == 1){
+                  //breaking from loop cycle
+                  break;
+              }
+              else
+               tble [i][j+spot-1] = 1;                          
+          }                
+      }
+}
+/*
+ * This is a point system function. Will check if an entire row is filled with
+ * ones then if it is points will be awarded. then after rows is added for 
+ * points the function will copy everything from the top of the rows and place 
+ * it down a row. returns new table
+ */
+int **newTable (int **tble, int &pts){
+    //int pts =0;
+    int dstryRow =0;
+    int **newTble = fillGrid (ROWS, COLS);
+    //do{
+    /*
+     * copying table
+     */
+    for (int i =0; i < ROWS; i++){
+        for (int j =0; j < COLS; j++){
+            newTble[i][j] = tble[i][j];
+        }
+    }
+        for (int i =0; i < ROWS; i++)
+        {
+            if (tble[i][0] == 1 && tble[i][1] == 1 &&tble[i][2] == 1 &&
+                    tble[i][3] == 1 &&tble[i][4] == 1 &&tble[i][5] == 1 &&
+                    tble[i][6] == 1 &&tble[i][7] == 1)
+            {
+                pts += 10;
+                dstryRow = i;
+            }
+            /*for (int i = dstryRow; dstryRow < ROWS; dstryRow++){
+                for (int j =0; j < COLS; j++){
+                     tble[dstryRow][j] = tble[dstryRow+1][j];
                 }
-            for (int i =ROWS-1 ; i >= 0; i--){
-                    if (tble [i][j] != 1){
-                         for (int i=ROWS-1; i >= ROWS-TWO; i--){
-                              for(int j=0; j < TWO; j++)  {
-                                   tble [i-counter][j+spot-1] = 1;
-                              }
-                         }
-                    }
-                        //else
-                           // counter++;
-                
-                        
-                        //else
-                            //tble [i-TWO][j+spot-1] = 1;
-                    
-                }
-              //this is full reverse but dont need full reverse
-        /*for (int i = ROWS-1; i  >=0; i--)
-        for(int j = COLS-1; j >= 0; j--)*/
-            
-       //}
+            }*/
+        }
+    destroy (newTble, ROWS);
+    return tble;
+    //}while(true);
 }
