@@ -1,7 +1,7 @@
 /* 
  * Jonathan Holt
  * C++ objects
- * midterm
+ * project
  * i certify this is my work
  */
 
@@ -41,11 +41,12 @@ struct UserObj
 void outputBegin ();
 int randObject ();
 int **objectNum (int num);
+//int **objectNum (int num, int&, int&);
 void outputTbl(int **, int, int);
 int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
-void objtPlcmnt(int **tble, int spot);
+//void objtPlcmnt(int **tble, int spot);
 void objtPlcmnt(int **tble, int spot, int rowOb, int colOb);
 int **newTable (int **tble, int &pts);
 void spotChoice (int &spot, int col);
@@ -53,8 +54,11 @@ void spotChoice (int &spot, int col);
 int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS);
+    srand (time(NULL));
     int **object;
     bool game;
+    int rowOb =0;
+    int colOb =0;
     int spot;
     int points = 0;
     
@@ -95,9 +99,14 @@ int main(int argc, char** argv) {
                 spotChoice (spot, TWO);
                 objtPlcmnt(table, spot, THREE, TWO);
                 destroy (object, THREE);
-                break;     
+                break;
+            case 6:
+                //object = objectNum (num, rowOb, colOb);
+                spotChoice (spot, colOb);
+                objtPlcmnt(table, spot, rowOb, colOb);
+                destroy (object, rowOb);
         }
-        table = newTable (table, points);
+        //table = newTable (table, points);
         cout << " YOUR CURRENT POINTS ARE : " << points << " KEEP GOING!!\n\n";
         //int **object = objectNum (num);
         //spotChoice (spot, TWO);
@@ -351,48 +360,65 @@ int **objectNum (int num)
            }
         }
     }
-    /*if (num == 6)
+    
+    return object;
+}
+/*int **objectNum (int num, int &rowOb, int &colOb)
+{
+    UserObj object ;//= new UserObj;
+    if (num == 6)
     {
-        int rowsObj, colsObj;
-        cout << "You get to build your own object!!!" << endl;
-        cout << "Only can build a max 5x5 object so enter any numbers you"
-                << endl << "wish to build starting with rows then columns."
-                << endl << "Enter your rows: " << endl;
-        cin >> rowsObj;
-        while (rowsObj > 5 || rowsObj < 1){
-            cout << "Please enter a number between 1 and 5!!!" << endl;
-            cin >> rowsObj;
+        cout << "This is a BONUS PLAY!" << endl << "User is allowed to enter"
+                " an object of their own choice." << endl << "The max size" 
+                " you may enter is a 5x5." << endl;
+        
+        cout << "Enter a row(s) number between 1 n 5" << endl;
+    //for (int i = 0 ; i < 5; i ++)
+        int count=0;
+        cin >> object.rows;
+        while (object.rows > 5 || object.rows < 1){
+            cout << "ENTER a number !only! between 1 n 5" << endl;
+            cin >> object.rows;
         }
-        cout << "Enter your columns: " << endl;
-        cin >> colsObj;
-        while (colsObj > 5 || colsObj < 1){
-            cout << "Please enter a number between 1 and 5!!!" << endl;
-            cin >> colsObj;
-        }
-        UserObj **object =new int*[rowsObj];//rows
-        //creating 2D array
-        for (int i=0; i < rowsObj ;i++)//rows
-        {
-            object[i]=new int[colsObj];//cols
-        }
-        //once created filling and outputting
-        cout << "\tThis is your object : " << endl  ;
-        for (int i=0; i < THREE; i++){//rows
+    cout << "Enter a column(s) number between 1 n 5" << endl;
+    //for (int i = 0 ; i < 5; i ++)
+    
+    cin >> object.cols;
+        while (object.cols > 5 || object.cols < 1){
+            cout << "ENTER a number !only! between 1 n 5" << endl;
+            cin >> object.cols;
+        }     
+    //creating user object
+    object.ptr = new int *[object.rows];//rows
+    for (int i = 0; i < object.rows; i++)//rows
+    {
+        object.ptr[i] = new int [object.cols];//cols
+    }
+    //once created filling and outputting
+        cout << "\tThis is your object : " << endl;
+        for (int i=0; i <object.rows; i++){//rows
             cout << "\t";
-           for(int j=0; j < TWO; j++){//cols
-              object[i][j]= 1;
-              cout << object1[i][j]  << "  ";
+           for(int j=0; j <object.cols; j++){//cols
+              object.ptr[i][j]= 1;
+              cout << object.ptr[i][j]  << "  ";
               count++;
-              if (count == TWO)
+              if (count == object.cols)
               {
                   cout <<  endl;
                   count = 0;
               }
-           }
+           } 
         }
-    }*/
-    return object;
-}
+        rowOb = object.rows;
+        colOb = object.cols;
+        /*for(int i=0;i<object.rows;i++)
+        {
+            delete []object.ptr[i];
+        }
+            delete []object.ptr;*/
+    //}
+    /*return object.ptr;
+}*/
 void spotChoice (int &spot, int col){
     cout << "Pick a spot to place object (1 to 8): " ;
         cin >> spot;
@@ -482,7 +508,7 @@ int **newTable (int **tble, int &pts){
             newTble[i][j] = tble[i][j];
         }
     }
-        for (int i =0; i < ROWS; i++)
+        for (int i = 0; i < ROWS; i++)
         {
             if (tble[i][0] == 1 && tble[i][1] == 1 &&tble[i][2] == 1 &&
                     tble[i][3] == 1 &&tble[i][4] == 1 &&tble[i][5] == 1 &&
@@ -491,12 +517,13 @@ int **newTable (int **tble, int &pts){
                 pts += 10;
                 dstryRow = i;
             }
-            /*for (int i = dstryRow; dstryRow < ROWS; dstryRow++){
+            for (int i = dstryRow; dstryRow < ROWS; dstryRow++){
                 for (int j =0; j < COLS; j++){
-                     tble[dstryRow][j] = tble[dstryRow+1][j];
+                     tble[i][j] = newTble[i+1][j];
                 }
-            }*/
+            }
         }
+
     destroy (newTble, ROWS);
     return tble;
     //}while(true);
