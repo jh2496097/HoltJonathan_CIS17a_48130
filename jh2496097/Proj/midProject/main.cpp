@@ -11,6 +11,7 @@
 #include <cctype>
 #include <cstring>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ using namespace std;
 const int ROWS = 18;
 const int COLS = 8;
 
-enum ObSpots {ONE = 1 , TWO = 2, THREE = 3, FOUR = 4, FIVE = 5};
+enum ObSpots {ONE = 1 , TWO, THREE, FOUR, FIVE};
 //diff objects to place on table
 const int object1 [TWO][TWO] = {1,1,
                                 1,1};
@@ -41,7 +42,7 @@ struct UserObj
 void outputBegin ();
 int randObject ();
 int **objectNum (int num);
-//int **objectNum (int num, int&, int&);
+int **objectNum1 (int num, int&, int&);
 void outputTbl(int **, int, int);
 int **fillGrid (int , int);
 bool isOver (int **tbl);
@@ -101,36 +102,16 @@ int main(int argc, char** argv) {
                 destroy (object, THREE);
                 break;
             case 6:
-                //object = objectNum (num, rowOb, colOb);
+                object = objectNum1 (num, rowOb, colOb);
                 spotChoice (spot, colOb);
                 objtPlcmnt(table, spot, rowOb, colOb);
                 destroy (object, rowOb);
         }
-        //table = newTable (table, points);
+        table = newTable (table, points);
         cout << " YOUR CURRENT POINTS ARE : " << points << " KEEP GOING!!\n\n";
         //int **object = objectNum (num);
         //spotChoice (spot, TWO);
-        
-       //objtPlcmnt(table, spot);
-       //objtPlcmnt(table, spot, TWO, TWO);
-     //object for any spot 1 - 8 only
-       /*for (int k = 1; k < 9; k++)
-       {
-        //int realSpot =0;
-        //int rowCount =0, colCount =0;
-        //object1 only spot 6 only
-            if (spot == k)
-            {
-                for (int i=ROWS-1; i >= ROWS-TWO; i--){
-                    for(int j=0; j < TWO; j++)  {
-                        table [i][j+spot-1] = 1;
-                    }
-                }
-            }  //this is full reverse but dont need full reverse
-        /*for (int i = ROWS-1; i  >=0; i--)
-        for(int j = COLS-1; j >= 0; j--)*/
-        //}
-    
+
         outputTbl(table, ROWS, COLS);
         
         //checking if lost
@@ -198,7 +179,7 @@ void outputBegin ()
     cout << "     |    | |   /------\\  |          |  ______   __ " << endl;
     cout << "     |    | |  |   ___ |  |          | |   ___| |  |   /------|\n"; 
     cout << "     |    | |  |  |___|    ---|  |---  |  /     |  |  /   /_--|\n"; 
-    cout << "     |    | |  \\  \\______     |  |     |  |     |  |  |_____ \\\n"; 
+  cout << "     |    | |  \\  \\______     |  |     |  |     |  |  |_____ \\\n"; 
     cout << "     |    | |   \\________/    |  |     |  |     |  |  _____/ |\n"; 
     cout << "     |____|/                   __      |__|     |__| |______/\n"; 
     cout << endl << endl;
@@ -206,9 +187,9 @@ void outputBegin ()
     cout << "This is a console based tetris game." << endl << "The console is"
             " going to constantly output a table at the user" << endl << "and"
             " the user will be promtped with an object/tetris block." << endl <<
-            "User then must pick a column in which to place that item." << endl
-            << "Filling a whole row will cause that row to be deleted and "
-            <<endl << "points will be awarded. " << endl;
+            "User then must pick a column in which to place that object."<< endl
+            << "Filling a whole row with 1's will cause that row to be deleted"
+            " and"<<endl << "points will be awarded. " << endl;
 }
 /*
  * Deleting allocated memory for 2D arrys/ptrs
@@ -229,7 +210,7 @@ void destroy(int **array,int rows)
 int randObject ()
 {
     int num;
-    num = rand()%5+1;
+    num = rand()%6+1;
     return num;
 }
 /*
@@ -254,6 +235,8 @@ int **objectNum (int num)
             cout << "\t";
            for(int j=0; j <TWO; j++){//cols
               object[i][j]= 1;
+              // TRY AND FINE OUT THIS INDEX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              //cout << **(object+(i * COLS)+j)  << "  ";
               cout << object[i][j]  << "  ";
               count++;
               if (count == TWO)
@@ -363,7 +346,7 @@ int **objectNum (int num)
     
     return object;
 }
-/*int **objectNum (int num, int &rowOb, int &colOb)
+int **objectNum1 (int num, int &rowOb, int &colOb)
 {
     UserObj object ;//= new UserObj;
     if (num == 6)
@@ -417,8 +400,9 @@ int **objectNum (int num)
         }
             delete []object.ptr;*/
     //}
-    /*return object.ptr;
-}*/
+    return object.ptr;
+    }
+}
 void spotChoice (int &spot, int col){
     cout << "Pick a spot to place object (1 to 8): " ;
         cin >> spot;
@@ -493,7 +477,7 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb)
  * This is a point system function. Will check if an entire row is filled with
  * ones then if it is points will be awarded. then after rows is added for 
  * points the function will copy everything from the top of the rows and place 
- * it down a row. returns new table
+ * it down a row. returns refilled table
  */
 int **newTable (int **tble, int &pts){
     //int pts =0;
@@ -508,6 +492,8 @@ int **newTable (int **tble, int &pts){
             newTble[i][j] = tble[i][j];
         }
     }
+    //for (int j =0; j < ROWS; j++){
+        
         for (int i = 0; i < ROWS; i++)
         {
             if (tble[i][0] == 1 && tble[i][1] == 1 &&tble[i][2] == 1 &&
@@ -515,15 +501,14 @@ int **newTable (int **tble, int &pts){
                     tble[i][6] == 1 &&tble[i][7] == 1)
             {
                 pts += 10;
-                dstryRow = i;
-            }
-            for (int i = dstryRow; dstryRow < ROWS; dstryRow++){
-                for (int j =0; j < COLS; j++){
-                     tble[i][j] = newTble[i+1][j];
+                for (int i = 0; i < ROWS-1; i++){
+                   for (int j =0; j < COLS ; j++){
+                     tble[i+1][j] = newTble[i][j];
+                   }
                 }
             }
         }
-
+    //}
     destroy (newTble, ROWS);
     return tble;
     //}while(true);
