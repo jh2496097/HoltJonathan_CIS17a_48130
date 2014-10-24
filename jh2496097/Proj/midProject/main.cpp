@@ -3,6 +3,7 @@
  * C++ objects
  * project
  * i certify this is my work
+ * INCORPORATE BETTER USER INPUT
  */
 
 #include <cstdlib>
@@ -39,6 +40,10 @@ struct UserObj
     int rows;
     int cols;
 };
+struct Filetrack{
+    string name;
+    int score;
+};
 void outputBegin ();
 int randObject ();
 int **objectNum (int num);
@@ -48,7 +53,7 @@ int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
 //void objtPlcmnt(int **tble, int spot);
-void objtPlcmnt(int **tble, int spot, int rowOb, int colOb);
+void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num);
 int **newTable (int **tble, int &pts);
 void spotChoice (int &spot, int col);
 
@@ -74,37 +79,37 @@ int main(int argc, char** argv) {
             case 1:
                 object = objectNum (num);
                 spotChoice (spot, TWO);
-                objtPlcmnt(table, spot, TWO, TWO);
+                objtPlcmnt(table, spot, TWO, TWO, 1);
                 destroy (object, TWO);
                 break;
             case 2:
                 object = objectNum (num);
                 spotChoice (spot, THREE);
-                objtPlcmnt(table, spot, ONE, THREE);
+                objtPlcmnt(table, spot, ONE, THREE, 2);
                 destroy (object, ONE);
                 break;
             case 3:
                 object = objectNum (num);
                 spotChoice (spot, ONE);
-                objtPlcmnt(table, spot, FOUR, ONE);
+                objtPlcmnt(table, spot, FOUR, ONE, 3);
                 destroy (object, FOUR);
                 break;
             case 4:
                 object = objectNum (num);
                 spotChoice (spot, THREE);
-                objtPlcmnt(table, spot, TWO, THREE);
+                objtPlcmnt(table, spot, TWO, THREE, 4);
                 destroy (object, TWO);
                 break;
             case 5:
                 object = objectNum (num);
                 spotChoice (spot, TWO);
-                objtPlcmnt(table, spot, THREE, TWO);
+                objtPlcmnt(table, spot, THREE, TWO, 5);
                 destroy (object, THREE);
                 break;
             case 6:
                 object = objectNum1 (num, rowOb, colOb);
                 spotChoice (spot, colOb);
-                objtPlcmnt(table, spot, rowOb, colOb);
+                objtPlcmnt(table, spot, rowOb, colOb, 6);
                 destroy (object, rowOb);
         }
         table = newTable (table, points);
@@ -122,6 +127,54 @@ int main(int argc, char** argv) {
     
     cout << "GAME IS OVER !!!!!!" << endl;
     cout << "Here is your final point count: " << points << endl;
+    fstream file;
+    string output;
+    string name;
+    int scores;
+    int count=1;
+    string *allNames;// = new string [count]; 
+    const int SIZE =10;
+    ///get 10 names and 10 scores keep track find lowest and if current play is
+    ///greater than lowest replace that one
+    cout << "Enter your name to be recorded to the file: ";
+    cin >> name;
+    
+    file.open("names.txt", ios:: in | ios::out);// ios::app |
+    
+    Filetrack *stats = new Filetrack [SIZE];
+    if(file){
+            while (file >> output)
+            {
+                cout << output << endl;
+                //allNames[count]=output;
+                count++;
+            }    
+        }
+    file.close();
+    allNames = new string [count];
+    file.open("names.txt", ios:: in );//| ios::ate
+    int i=0;
+    if(file){
+            while (file >> output)
+            {
+                allNames[i]=output;
+                i++;
+            }    
+        }
+    
+    file.close();
+    allNames[count-1]=name;
+    for (int i=0;i<count;i++){
+        cout << allNames[i] << "  ";
+    }
+    file.open("names.txt", ios:: out);
+    for (int i=0;i<count;i++){
+        file << allNames[i] << "  " <<endl;
+    }
+    file.close();
+    //NOW to work with get scores.dat parallel dynamic arrays
+    delete []stats;
+    delete []allNames;
     return 0;
 }
 void outputTbl(int **ptr, int rows, int cols)
@@ -425,7 +478,7 @@ bool isOver (int **tbl)
     int i = 0;
     for (int col=0; col < COLS;col++){
         //[0][j] because this would start from the top left of table
-        if (tbl[i][col] == 1)
+        if (tbl[i][col] != 0)
         {
             lose = false;
             break;
@@ -435,7 +488,7 @@ bool isOver (int **tbl)
     }
     return lose;
 }
-void objtPlcmnt(int **tble, int spot, int rowOb, int colOb)
+void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
 {
     //columns
     int col = spot-1;
@@ -448,7 +501,7 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb)
         */
         for (int k = 0; k < colOb; k++)
         {
-         if (tble[i][col+k] == 1 )//|| tble[i][col+1] == 1)//|| tble[i][col+1+1] == 1)// for three columns
+         if (tble[i][col+k] != 0 )//|| tble[i][col+1] == 1)//|| tble[i][col+1+1] == 1)// for three columns
          {
              //setting row
              row = i;
@@ -464,12 +517,12 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb)
           for(int j=0; j < colOb; j++)  {
               //checking if spot[col] top of table = 1 if so break from placing
               //one
-              if (tble[0][col] == 1){
+              if (tble[0][col] != 0){
                   //breaking from loop cycle
                   break;
               }
               else
-               tble [i][j+spot-1] = 1;                          
+               tble [i][j+spot-1] = num;                          
           }                
       }
 }
@@ -483,6 +536,7 @@ int **newTable (int **tble, int &pts){
     //int pts =0;
     int dstryRow =0;
     int **newTble = fillGrid (ROWS, COLS);
+    int count=0;
     //do{
     /*
      * copying table
@@ -492,23 +546,37 @@ int **newTable (int **tble, int &pts){
             newTble[i][j] = tble[i][j];
         }
     }
-    //for (int j =0; j < ROWS; j++){
-        
+    for (int i = 0; i < ROWS; i++)
+    {
+         if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
+                    tble[i][3] != 0 &&tble[i][4] != 0 &&tble[i][5] != 0 &&
+                    tble[i][6] != 0 &&tble[i][7] != 0)
+         {
+             count++;
+         }
+    }
+    //int times = count;
+    //count =0;
+    for(int index=0; index < count; index++){
         for (int i = 0; i < ROWS; i++)
         {
-            if (tble[i][0] == 1 && tble[i][1] == 1 &&tble[i][2] == 1 &&
-                    tble[i][3] == 1 &&tble[i][4] == 1 &&tble[i][5] == 1 &&
-                    tble[i][6] == 1 &&tble[i][7] == 1)
+            if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
+                    tble[i][3] != 0 &&tble[i][4] != 0 &&tble[i][5] != 0 &&
+                    tble[i][6] != 0 &&tble[i][7] != 0)
             {
+                //count++;
                 pts += 10;
-                for (int i = 0; i < ROWS-1; i++){
-                   for (int j =0; j < COLS ; j++){
-                     tble[i+1][j] = newTble[i][j];
-                   }
+                dstryRow=i;
+                //for (int i=row-1; i >= row-rowOb; i--)
+                //for (int i = ROWS-1; i >= 0; i--)
+                for (int k = 0; k < dstryRow; k++){
+                     for (int j =0; j < COLS ; j++){
+                          tble[k+1][j] = newTble[k][j];
+                     }
                 }
             }
         }
-    //}
+    }
     destroy (newTble, ROWS);
     return tble;
     //}while(true);

@@ -8,8 +8,6 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>names.txt</itemPath>
-      <itemPath>scores.dat</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -41,10 +39,6 @@
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="names.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="scores.dat" ex="false" tool="3" flavor2="0">
-      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -68,10 +62,6 @@
         </asmTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="names.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="scores.dat" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
