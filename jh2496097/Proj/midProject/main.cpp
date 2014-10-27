@@ -1,9 +1,8 @@
-/* 
+/** 
  * Jonathan Holt
  * C++ objects
  * project
  * i certify this is my work
- * INCORPORATE BETTER USER INPUT
  */
 
 #include <cstdlib>
@@ -16,31 +15,25 @@
 
 using namespace std;
 
-//table
+/**
+ * Constant variables to build the table in this program which is used as
+ * 2D array/pointer table.
+ */
 const int ROWS = 18;
 const int COLS = 8;
+/**
+ * Enumerator data.
+ * Used to create the sizes of objects throughout the program.
+ */
+enum ObSpots {ONE = 1 , TWO, THREE, FOUR, FIVE};/**< Enum value starting at 1.*/
 
-enum ObSpots {ONE = 1 , TWO, THREE, FOUR, FIVE};
-//diff objects to place on table
-const int object1 [TWO][TWO] = {1,1,
-                                1,1};
-const int object2 [ONE][THREE] = {1,1,1};
-const int object3 [FOUR][ONE] = {1,
-                                 1,
-                                 1,
-                                 1};
-const int object4 [TWO][THREE] = {1,1,1,
-                                  1,1,1};
-const int object5 [THREE][TWO] = {1,1,
-                                  1,1,
-                                  1,1};
-struct UserObj
+struct UserObj /**< Structure used to make object made by user.*/
 {
     int **ptr;
     int rows;
     int cols;
 };
-struct Filetrack{
+struct Filetrack{/**< Structure that takes in names and scores from files.*/
     string name;
     int score;
 };
@@ -56,17 +49,19 @@ void destroy (int**, int);
 void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num);
 int **newTable (int **tble, int &pts);
 void spotChoice (int &spot, int col);
+int realNum (int n);
+void fileScores (int);
 
 int main(int argc, char** argv) {
     //making table
-    int **table = fillGrid (ROWS, COLS);
+    int **table = fillGrid (ROWS, COLS); /**< Table to be used for game. */
     srand (time(NULL));
-    int **object;
-    bool game;
-    int rowOb =0;
-    int colOb =0;
-    int spot;
-    int points = 0;
+    int **object; /**< 2D ptr that user will be prompted with.*/
+    bool game; /**< Bool check to end the game officially. */
+    int rowOb =0; /**< Row size of object.*/
+    int colOb =0;/**< Column size of object.*/
+    int spot; /**< User choice of placement of objects.*/
+    int points = 0;/**< Points to be tracked while playing. */
     
     //begin function
     outputBegin ();
@@ -127,56 +122,19 @@ int main(int argc, char** argv) {
     
     cout << "GAME IS OVER !!!!!!" << endl;
     cout << "Here is your final point count: " << points << endl;
-    fstream file;
-    string output;
-    string name;
-    int scores;
-    int count=1;
-    string *allNames;// = new string [count]; 
-    const int SIZE =10;
-    ///get 10 names and 10 scores keep track find lowest and if current play is
-    ///greater than lowest replace that one
-    cout << "Enter your name to be recorded to the file: ";
-    cin >> name;
     
-    file.open("names.txt", ios:: in | ios::out);// ios::app |
+    fileScores (points);
     
-    Filetrack *stats = new Filetrack [SIZE];
-    if(file){
-            while (file >> output)
-            {
-                cout << output << endl;
-                //allNames[count]=output;
-                count++;
-            }    
-        }
-    file.close();
-    allNames = new string [count];
-    file.open("names.txt", ios:: in );//| ios::ate
-    int i=0;
-    if(file){
-            while (file >> output)
-            {
-                allNames[i]=output;
-                i++;
-            }    
-        }
-    
-    file.close();
-    allNames[count-1]=name;
-    for (int i=0;i<count;i++){
-        cout << allNames[i] << "  ";
-    }
-    file.open("names.txt", ios:: out);
-    for (int i=0;i<count;i++){
-        file << allNames[i] << "  " <<endl;
-    }
-    file.close();
-    //NOW to work with get scores.dat parallel dynamic arrays
-    delete []stats;
-    delete []allNames;
     return 0;
 }
+/**
+ * This function is used to output the 2D table to the console that user will
+ * be interacting with by placing objects in it. Outputs this table constantly
+ * so user can always see it.
+ * @param ptr 2D pointer.
+ * @param rows size for rows.
+ * @param cols size for columns.
+ */
 void outputTbl(int **ptr, int rows, int cols)
 {
     int count = 0;
@@ -195,11 +153,15 @@ void outputTbl(int **ptr, int rows, int cols)
         }
     }
     cout << "\t    -------------------------------------" << endl;
-    cout << "Columns \t1   2   3   4   5   6   7   8     "<< endl;
+    cout << "Columns \t1   2   3   4   5   6   7   8     "<< endl<<endl;
 }
-/*
- * Function fills a table with numbers by the set amount of ROWS n COLS
- * sets each one to 0 and then returns the 2D pointer
+/**
+ * Function creates a dynamic two dimensional table which is created by the
+ * size of ROWS and COLS and sets all elements to 0. After that it then returns
+ * the 2D pointer.
+ * @param ROWS size for rows.
+ * @param COLS size for columns.
+ * @return 2D dynamic pointer.
  */
 int **fillGrid (int ROWS, int COLS)
 {
@@ -219,8 +181,9 @@ int **fillGrid (int ROWS, int COLS)
     }
     return array;
 }
-/*
- * Information of beginning of game
+/**
+ * Information of beginning of game to give a brief description for how the 
+ * game is played. 
  */
 void outputBegin ()
 {
@@ -239,13 +202,20 @@ void outputBegin ()
     
     cout << "This is a console based tetris game." << endl << "The console is"
             " going to constantly output a table at the user" << endl << "and"
-            " the user will be promtped with an object/tetris block." << endl <<
+            " the user will be prompted with an object/tetris cube." << endl <<
             "User then must pick a column in which to place that object."<< endl
-            << "Filling a whole row with 1's will cause that row to be deleted"
-            " and"<<endl << "points will be awarded. " << endl;
+            <<"Starting from left to right object will be placed." <<endl
+            << "Filling a whole row with any #'s will cause that row to be"
+            " deleted and"<<endl << "points will be awarded. Continue playing"
+            " till a number touches the" << endl <<"top row then game is over"
+            " and points will be saved." <<endl;
 }
-/*
- * Deleting allocated memory for 2D arrys/ptrs
+/**
+ * destroy function is used to delete all of the dynamically created objects
+ * in the program which most are 2D so need to delete by rows first then delete
+ * the entire thing.
+ * @param array the dynamic 2D pointer/array.
+ * @param rows rows to be deleted first.
  */
 void destroy(int **array,int rows)
 {
@@ -256,19 +226,24 @@ void destroy(int **array,int rows)
     }
     delete []array;
 }
-/*
- * rand function getting a random number between 1 and 5 in respect to 5
- * diff objects
- */ 
+/**
+ * Rand function is user to get a number between 1 and 6. It is for the 
+ * different objects to be randomized by particularly 6 of them.
+ * @return an integer value to be used to choose a random object.
+ */
 int randObject ()
 {
     int num;
     num = rand()%6+1;
     return num;
 }
-/*
- * Creating diff object to be placed in the table similiar to objects at 
- * top with const creation using dynamic allocation here
+/**
+ * This function has multiple objects from which takes a number 1 to 5 and 
+ * dynamically creates the object. Then outputs that object to the screen
+ * for user to see what that dynamic 2D pointer looks like and then 
+ * to be placed on table.
+ * @param num a random integer value used to pick object.
+ * @return the object chosen by integer num returns a 2D dynamic array.
  */
 int **objectNum (int num)
 {
@@ -283,7 +258,7 @@ int **objectNum (int num)
             object[i]=new int[TWO];//cols
         }
         //once created filling and outputting
-        cout << "\tThis is your object : " << endl;
+        cout << "\tThis is your block : " << endl;
         for (int i=0; i <TWO; i++){//rows
             cout << "\t";
            for(int j=0; j <TWO; j++){//cols
@@ -309,12 +284,12 @@ int **objectNum (int num)
             object[i]=new int[THREE];//cols
         }
         //once created filling and outputting
-        cout << "\tThis is your object : " << endl  ;
+        cout << "\tThis is your block : " << endl  ;
         for (int i=0; i <ONE; i++){//rows
             cout << "\t";
            for(int j=0; j <THREE; j++){//cols
               object[i][j]= 1;
-              cout << object1[i][j]  << "  ";
+              cout << object[i][j]  << "  ";
               count++;
               if (count == THREE)
               {
@@ -333,12 +308,12 @@ int **objectNum (int num)
             object[i]=new int[ONE];//cols
         }
         //once created filling and outputting
-        cout << "\tThis is your object : " << endl  ;
+        cout << "\tThis is your block : " << endl  ;
         for (int i=0; i <FOUR; i++){//rows
             cout << "\t";
            for(int j=0; j <ONE; j++){//cols
               object[i][j]= 1;
-              cout << object1[i][j]  << "  ";
+              cout << object[i][j]  << "  ";
               count++;
               if (count == ONE)
               {
@@ -357,12 +332,12 @@ int **objectNum (int num)
             object[i]=new int[THREE];//cols
         }
         //once created filling and outputting
-        cout << "\tThis is your object : " << endl  ;
+        cout << "\tThis is your block : " << endl  ;
         for (int i=0; i < TWO; i++){//rows
             cout << "\t";
            for(int j=0; j < THREE; j++){//cols
               object[i][j]= 1;
-              cout << object1[i][j]  << "  ";
+              cout << object[i][j]  << "  ";
               count++;
               if (count == THREE)
               {
@@ -381,12 +356,12 @@ int **objectNum (int num)
             object[i]=new int[TWO];//cols
         }
         //once created filling and outputting
-        cout << "\tThis is your object : " << endl  ;
+        cout << "\tThis is your block : " << endl  ;
         for (int i=0; i < THREE; i++){//rows
             cout << "\t";
            for(int j=0; j < TWO; j++){//cols
               object[i][j]= 1;
-              cout << object1[i][j]  << "  ";
+              cout << object[i][j]  << "  ";
               count++;
               if (count == TWO)
               {
@@ -399,9 +374,21 @@ int **objectNum (int num)
     
     return object;
 }
+/**
+ * A function that creates a 2 dimensional pointer through a structure. Allows 
+ * user to make it and checks for valid user input. User enters a row size
+ * then a column size not allowing to be bigger than 5 or less than 1 for both.
+ * Keeps track of row and column integers to be used for delete later.
+ * @see objectNum().
+ * @param num a random integer value used to pick object.
+ * @param rowOb an integer to save the row value.
+ * @param colOb an integer to save the column value.
+ * @return the object chosen by integer number returns a 2D dynamic array.
+ */
 int **objectNum1 (int num, int &rowOb, int &colOb)
 {
     UserObj object ;//= new UserObj;
+    string valid;
     if (num == 6)
     {
         cout << "This is a BONUS PLAY!" << endl << "User is allowed to enter"
@@ -411,19 +398,25 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
         cout << "Enter a row(s) number between 1 n 5" << endl;
     //for (int i = 0 ; i < 5; i ++)
         int count=0;
-        cin >> object.rows;
-        while (object.rows > 5 || object.rows < 1){
-            cout << "ENTER a number !only! between 1 n 5" << endl;
-            cin >> object.rows;
+        cin >> valid;
+        while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
+            valid != "5")
+        {
+            cout << "Only enter a number 1 thru 5!!!" << endl;
+            cin >> valid;
+            //object.rows = realNum (valid[0]);
         }
-    cout << "Enter a column(s) number between 1 n 5" << endl;
-    //for (int i = 0 ; i < 5; i ++)
-    
-    cin >> object.cols;
-        while (object.cols > 5 || object.cols < 1){
-            cout << "ENTER a number !only! between 1 n 5" << endl;
-            cin >> object.cols;
-        }     
+        object.rows = realNum (valid[0]);
+        
+        cout << "Enter a column(s) number between 1 n 5" << endl;
+        cin >> valid;
+        
+        while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
+            valid != "5"){
+            cout << "Only enter a number 1 thru 5!!!" << endl;
+            cin >> valid;
+        }
+        object.cols = realNum (valid[0]);
     //creating user object
     object.ptr = new int *[object.rows];//rows
     for (int i = 0; i < object.rows; i++)//rows
@@ -431,7 +424,7 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
         object.ptr[i] = new int [object.cols];//cols
     }
     //once created filling and outputting
-        cout << "\tThis is your object : " << endl;
+        cout << "\tThis is your block : " << endl;
         for (int i=0; i <object.rows; i++){//rows
             cout << "\t";
            for(int j=0; j <object.cols; j++){//cols
@@ -456,20 +449,75 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
     return object.ptr;
     }
 }
+/**
+ * This function spotChoice allows user to input data that will then decide 
+ * where they wish to place their object. Checks for user validation by taking
+ * a string first thing converting it to an integer. The integer spot is 
+ * referenced to be changed throughout the program. Returns nothing.
+ * @param spot an integer value that represents spot to be placed on table.
+ * @param col an integer value needed to check for bounds issues.
+ */
 void spotChoice (int &spot, int col){
+    string choice;
     cout << "Pick a spot to place object (1 to 8): " ;
-        cin >> spot;
+    cin >> choice;
+    while (choice != "1" &&choice != "2" &&choice != "3" &&choice != "4" &&
+            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8")
+    {
+        cout << "Only enter a number 1 thru 8!!!" << endl;
+        cin >> choice;
+    }
+    spot =  realNum (choice[0]);
+    //cout << "SPOT: "  << spot << "SPPOT!!"<<endl;
     //IMPORTANT BOUNDS CHECKING AND PLACEMENT
     //first area checks spot choice compared to column size of object
     //rest makes sure number is 1 - 8
-        while ((spot-1) + col > 8 || spot < 1 || spot > 8){
-            cout << "Over Bounds will occur!!!!" << endl;
-            cout << "Cannot place there please pick another:" << endl;
-            cin >> spot;
-        }
+    while ((spot-1) + col > 8 || spot < 1 || spot > 8){
+         cout << "Over Bounds will occur!!!!" << endl;
+         cout << "Cannot place there please pick another:" << endl;
+         cin >> choice;
+         while(choice != "1" &&choice != "2" &&choice != "3" &&choice != "4" &&
+            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
+             cout << "Only enter a number 1 thru 8!!!" << endl;
+              cin >> choice;
+              spot =  realNum (choice[0]);
+         }
+    }
 }
-/*
- * check to see if a column is full and if it is then game over
+/**
+ * The function realNum takes an integer number between 1 and 8 that then 
+ * references it back to the ascII table to be able to convert it to its 
+ * actual number.
+ * @param n an integer value that inputted by user.
+ * @return returns an integer value.
+ */
+int realNum (int n){
+    int realOne;
+    if (n == 49){
+        realOne = 1;
+    }if (n == 50) {
+        realOne = 2;
+    }if (n == 51){
+        realOne = 3;
+    }if (n == 52){
+        realOne = 4;
+    }if (n == 53){
+        realOne = 5;
+    }if (n == 54){
+        realOne = 6;
+    }if (n == 55){
+        realOne = 7;
+    }if (n == 56){
+        realOne = 8;
+    }
+    return realOne;
+}
+/**
+ * The function isOver is checking for a non 0 value on the first row of the 
+ * table. If it finds this value it instantly breaks from stacking objects on
+ * the table that way over bounds issues will not come into play.
+ * @param tbl 2D pointer that represents a table of elements.
+ * @return condition of true or false.
  */
 bool isOver (int **tbl)
 {
@@ -488,6 +536,18 @@ bool isOver (int **tbl)
     }
     return lose;
 }
+/**
+ * The function objtPlcmnt is first going take 2D table then since object is
+ * of a certain size looking at size of column spots to check for a #. If there
+ * is a # in either spot i set rows to that spot to then place object on top 
+ * of the numbers in table. Uses a break statement to break from going over
+ * bounds when placing an object.
+ * @param tble 2D table.
+ * @param spot integer value entered by user.
+ * @param rowOb integer row size of object.
+ * @param colOb integer column size of object.
+ * @param num integer value to represent numbers in the object.
+ */
 void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
 {
     //columns
@@ -495,24 +555,16 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
     int row = ROWS;
     //starting from bottom left to top
     for (int i = ROWS-1; i >= 0; i--){
-       /* going to table then since object is size TWO looking at two spots to
-        * check for a 1. If there is a one in either spot i set rows to that
-        * spot to then tell me which row to start building from
-        */
         for (int k = 0; k < colOb; k++)
         {
-         if (tble[i][col+k] != 0 )//|| tble[i][col+1] == 1)//|| tble[i][col+1+1] == 1)// for three columns
+         if (tble[i][col+k] != 0 )//||
          {
              //setting row
              row = i;
          }            
         }
      }
-    /*
-     * Going through with 2 loops to place a [TWO][TWO] object on the table
-     * with the right row to start from and checking to make sure top row is not
-     * a one or else i break from it to not cause bounds issues.
-     */
+
      for (int i=row-1; i >= row-rowOb; i--){
           for(int j=0; j < colOb; j++)  {
               //checking if spot[col] top of table = 1 if so break from placing
@@ -526,24 +578,25 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
           }                
       }
 }
-/*
- * This is a point system function. Will check if an entire row is filled with
- * ones then if it is points will be awarded. then after rows is added for 
- * points the function will copy everything from the top of the rows and place 
- * it down a row. returns refilled table
+/**
+ * This function newTable is designed to act as the point system for the game. 
+ * It creates a new dynamic 2D table and then copies the one currently being
+ * use by user. It loops through all the rows in the table by checking for
+ * non zero #s and if it finds that row saves that row. After that goes 
+ * through two loops to copy the row above that row and everything above it to 
+ * be placed where the row with all #'s were.
+ * @param tble 2D pointer of table for game play.
+ * @param pts integer value that is used to keep track of user points.
+ * @return the 2D pointer that represents new table.
  */
 int **newTable (int **tble, int &pts){
-    //int pts =0;
-    int dstryRow =0;
-    int **newTble = fillGrid (ROWS, COLS);
+    int dstryRow =0; /**< Integer value of row where replacing happens.*/ 
+    int **newTble = fillGrid (ROWS, COLS);/**< Creating new table to copy.*/
     int count=0;
-    //do{
-    /*
-     * copying table
-     */
+
     for (int i =0; i < ROWS; i++){
         for (int j =0; j < COLS; j++){
-            newTble[i][j] = tble[i][j];
+            newTble[i][j] = tble[i][j]; /**< Copying new table.*/
         }
     }
     for (int i = 0; i < ROWS; i++)
@@ -555,9 +608,7 @@ int **newTable (int **tble, int &pts){
              count++;
          }
     }
-    //int times = count;
-    //count =0;
-    for(int index=0; index < count; index++){
+
         for (int i = 0; i < ROWS; i++)
         {
             if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
@@ -576,8 +627,120 @@ int **newTable (int **tble, int &pts){
                 }
             }
         }
-    }
+
     destroy (newTble, ROWS);
     return tble;
-    //}while(true);
+}
+/**
+ * The function fileScores serves the purpose of a high score tracking system. 
+ * It first goes through the name file to get a count to find out how big of 
+ * a dynamic structure needs to be allocated. Then 2D dynamic structure is
+ * created to keep track of parallel names and points. First, names are read 
+ * and saved and then last person played name is saved and written back to the
+ * file. After, points are read in and then points of last played game are also
+ * recorded and then all sent back to the files. After that, names and 
+ * points are then sorted parallel to find highest to lowest then printed to
+ * user.
+ * @param points integer value of user's points after game is done.
+ */
+void fileScores (int points){
+    fstream file;
+    string output;
+    string name;
+    int scores;
+    int count=1;
+    
+    cout << "Enter your name to be recorded to the file: ";
+    cin.ignore();
+    getline (cin, name);
+    
+    file.open("names.txt", ios:: in | ios::out);// ios::app |
+    
+    if(file){
+            while (getline(file, output))
+            {
+                count++;
+            }    
+        }
+    file.close();
+    //allNames = new string [count];
+    //allpoints = new int [count];
+    Filetrack *stats = new Filetrack [count];
+    file.open("names.txt", ios:: in );//| ios::ate
+    int i=0;
+    if(file){
+                getline(file, output); //WORKING ON GETLINE
+            while (file)
+            {
+                stats[i].name=output;
+                i++;
+                getline(file, output);
+            }    
+        }
+    
+    file.close();
+    //setting name entered to last element
+    stats[count-1].name=name;
+
+    cout<<endl;
+    file.open("names.txt", ios:: out);
+    for (int i=0;i<count;i++){
+        
+        if (i != count-1)
+        {
+            file << stats[i].name <<endl;
+        }
+        else
+            file << stats[i].name;
+    }
+    file.close();
+    file.open("scores.dat", ios:: in );//| ios::ate
+    int i1=0;
+    if(file){
+            while (file >> scores)
+            {
+                stats[i1].score=scores;
+                i1++;
+            }    
+        }
+    
+    file.close();
+    //setting points of last person played to last element
+    stats[count-1].score=points;
+
+    file.open("scores.dat", ios:: out);
+    for (int i=0;i<count;i++){
+        
+        if (i != count-1)
+        {
+            file << stats[i].score <<endl;
+        }
+        else
+            file << stats[i].score;
+    }
+    file.close();
+    int temp = 0;
+    string temp1="";
+    for (int i = 0; i < count - 1; i++)
+    {
+        for (int j = i + 1; j < count; j++)
+        {
+            if (stats[j].score < stats[i].score)
+            {     
+                temp = stats[j].score;
+                stats[j].score = stats[i].score;
+                stats[i].score = temp;
+                temp1 = stats[j].name;
+                stats[j].name = stats[i].name;
+                stats[i].name = temp1;
+            }
+        }
+    }
+    cout << "\nHIGH SCORES!!!!!!!!!!!!!!!!!!!!" <<endl;
+    cout << "NAME:             SCORES:"<<endl;
+    for (int i=count-1; i >=0;i--){
+        cout<<left<<setw(20)<<stats[i].name << stats[i].score <<endl;
+    }
+
+    delete []stats;
 }

@@ -1,0 +1,37 @@
+PsuedoCode: 
+Start program by outputting details of game to user
+create of 2D array/pointer table and fill it with 0's 
+
+Start game loop
+call a random number for number of blocks that can be created this game currently is 1-6
+if 1-6
+   create and fill a 2D block dynamically to be played in table
+
+user is promtped with choice of where to place object
+user validation input is checked by entering acceptable number for placement
+   also checks for multiple columns objects to not cause bounds issues
+
+once user choice has been picked game looks for a non 0 number to place block
+   on top of any numbers that could be blocking it from falling all the way down.
+After that it will place block vertically where it should go however
+if block reaches top row game is ended
+else block is set on table accordingly
+
+destroy dynamically created block after it has been placed
+
+Check for all #'s in a row
+if all of row == # other than 0 |or| all of row != 0
+   create and copy table dynamically with 2D array/pointer
+   find row that contains full row of #'s then 
+   proceed to copy top of that row down exactly one row to replace
+   all the numbers that completed a full row of #'s
+   user is awarded 10 points
+
+game ends when a block reaches top row of table
+
+use a structure to save names and points parallel
+   Read in names from a file save them
+   Read in points from a file save them
+if one element > second element
+   Sort
+Output to screen the highscores 
