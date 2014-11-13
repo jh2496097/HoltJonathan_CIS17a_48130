@@ -472,16 +472,14 @@ void spotChoice (int &spot, int col){
     //IMPORTANT BOUNDS CHECKING AND PLACEMENT
     //first area checks spot choice compared to column size of object
     //rest makes sure number is 1 - 8
-    while ((spot-1) + col > 8 || spot < 1 || spot > 8){
+    while ((spot-1) + col > 8 || spot < 1 || spot > 8&&choice != "1"
+            &&choice != "2" &&choice != "3" &&choice != "4" &&
+            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
          cout << "Over Bounds will occur!!!!" << endl;
          cout << "Cannot place there please pick another:" << endl;
          cin >> choice;
-         while(choice != "1" &&choice != "2" &&choice != "3" &&choice != "4" &&
-            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
-             cout << "Only enter a number 1 thru 8!!!" << endl;
-              cin >> choice;
-              spot =  realNum (choice[0]);
-         }
+         
+         spot =  realNum (choice[0]);
     }
 }
 /**
