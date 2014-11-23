@@ -4,12 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>printtable.h</itemPath>
+      <itemPath>tettable.h</itemPath>
+      <itemPath>userobject.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>names.txt</itemPath>
+      <itemPath>printtable.cpp</itemPath>
       <itemPath>scores.dat</itemPath>
+      <itemPath>tettable.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -43,7 +48,17 @@
       </item>
       <item path="names.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="printtable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="printtable.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tettable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="userobject.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -71,7 +86,17 @@
       </item>
       <item path="names.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="printtable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="printtable.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tettable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="userobject.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

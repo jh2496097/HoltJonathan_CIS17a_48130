@@ -3,6 +3,8 @@
  * C++ objects
  * project
  * i certify this is my work
+ * 
+ * **&*&*$%^@# need to make cpp file for userobject
  */
 
 #include <cstdlib>
@@ -12,7 +14,7 @@
 #include <cstring>
 #include <ctime>
 #include <fstream>
-
+#include "tettable.h"
 using namespace std;
 
 /**
@@ -55,6 +57,7 @@ void fileScores (int);
 int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS); /**< Table to be used for game. */
+    TetrisTable tble(18,8);
     srand (time(NULL));
     int **object; /**< 2D ptr that user will be prompted with.*/
     bool game; /**< Bool check to end the game officially. */
