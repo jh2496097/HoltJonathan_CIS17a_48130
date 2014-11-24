@@ -15,6 +15,7 @@
       <itemPath>printtable.cpp</itemPath>
       <itemPath>scores.dat</itemPath>
       <itemPath>tettable.cpp</itemPath>
+      <itemPath>userobject.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -58,6 +59,8 @@
       </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="userobject.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="userobject.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
@@ -95,6 +98,8 @@
       <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="userobject.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="userobject.h" ex="false" tool="3" flavor2="0">
       </item>

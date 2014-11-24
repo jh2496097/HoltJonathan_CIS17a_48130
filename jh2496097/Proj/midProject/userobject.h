@@ -13,6 +13,7 @@ class UserObject{
         int **object;
         int row;
         int col;
+        void fillObject();
     public:
         UserObject();
         UserObject(int, int);
@@ -21,6 +22,8 @@ class UserObject{
         void setCol(int);
         int getRow()const;
         int getCol()const;
+        void print()const;
+        int **getBlock()const;
 };
 
 #endif	/* USEROBJECT_H */

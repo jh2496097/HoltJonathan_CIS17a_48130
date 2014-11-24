@@ -4,6 +4,7 @@
 
 
 #include "tettable.h"
+//constructor
 TetrisTable::TetrisTable(){
     table = new int *[row];
     for (int i=0; i<row;i++){
@@ -20,6 +21,7 @@ TetrisTable::TetrisTable(int r, int c){
          table[i] = new int [col];
     }
 }
+//copy constructor
 TetrisTable::TetrisTable(const TetrisTable &cpyTble){
     row = cpyTble.row;
     col = cpyTble.col;

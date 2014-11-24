@@ -37,7 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/printtable.o \
-	${OBJECTDIR}/tettable.o
+	${OBJECTDIR}/tettable.o \
+	${OBJECTDIR}/userobject.o
 
 
 # C Compiler Flags
@@ -78,6 +79,11 @@ ${OBJECTDIR}/tettable.o: tettable.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/tettable.o tettable.cpp
+
+${OBJECTDIR}/userobject.o: userobject.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/userobject.o userobject.cpp
 
 # Subprojects
 .build-subprojects:

@@ -3,8 +3,6 @@
  * C++ objects
  * project
  * i certify this is my work
- * 
- * **&*&*$%^@# need to make cpp file for userobject
  */
 
 #include <cstdlib>
@@ -15,6 +13,7 @@
 #include <ctime>
 #include <fstream>
 #include "tettable.h"
+#include "userobject.h"
 using namespace std;
 
 /**
@@ -391,6 +390,7 @@ int **objectNum (int num)
 int **objectNum1 (int num, int &rowOb, int &colOb)
 {
     UserObj object ;//= new UserObj;
+    //UserObject block;
     string valid;
     if (num == 6)
     {
@@ -410,6 +410,8 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
             //object.rows = realNum (valid[0]);
         }
         object.rows = realNum (valid[0]);
+        int row = realNum (valid[0]);
+        //block.setRow(realNum(valid[0]));
         
         cout << "Enter a column(s) number between 1 n 5" << endl;
         cin >> valid;
@@ -420,7 +422,11 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
             cin >> valid;
         }
         object.cols = realNum (valid[0]);
+        int col = realNum (valid[0]);
+        //block.setCol(realNum (valid[0]));
     //creating user object
+        UserObject block1(row, col);
+        block1.print();
     object.ptr = new int *[object.rows];//rows
     for (int i = 0; i < object.rows; i++)//rows
     {
@@ -449,7 +455,15 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
         }
             delete []object.ptr;*/
     //}
-    return object.ptr;
+        int** g = block1.getBlock();
+    return g;
+        for(int i=0; i<block1.getRow();i++){
+            for(int j =0; j<block1.getCol();j++){
+                cout << g[i][j] << "--" ;
+            }
+            cout <<endl;
+        }
+    //return object.ptr;
     }
 }
 /**
