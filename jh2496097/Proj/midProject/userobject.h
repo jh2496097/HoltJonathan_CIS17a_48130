@@ -9,21 +9,23 @@
 #define	USEROBJECT_H
 
 class UserObject{
-    private:
+    private:      
         int **object;
         int row;
         int col;
         void fillObject();
-    public:
+    public:   
         UserObject();
         UserObject(int, int);
         ~UserObject();
+        void createBlk();
         void setRow(int);
         void setCol(int);
         int getRow()const;
         int getCol()const;
-        void print()const;
         int **getBlock()const;
+        //int **getPointr(**int);
+        void print()const;       
 };
 
 #endif	/* USEROBJECT_H */

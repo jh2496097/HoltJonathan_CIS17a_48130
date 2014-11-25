@@ -14,6 +14,7 @@
 #include <fstream>
 #include "tettable.h"
 #include "userobject.h"
+
 using namespace std;
 
 /**
@@ -26,7 +27,7 @@ const int COLS = 8;
  * Enumerator data.
  * Used to create the sizes of objects throughout the program.
  */
-enum ObSpots {ONE = 1 , TWO, THREE, FOUR, FIVE};/**< Enum value starting at 1.*/
+enum ObSpots {ONE = 1, TWO, THREE, FOUR, FIVE};/**< Enum value starting at 1.*/
 
 struct UserObj /**< Structure used to make object made by user.*/
 {
@@ -41,7 +42,7 @@ struct Filetrack{/**< Structure that takes in names and scores from files.*/
 void outputBegin ();
 int randObject ();
 int **objectNum (int num);
-int **objectNum1 (int num, int&, int&);
+int **objectNum1 (UserObject &,int num, int&, int&);
 void outputTbl(int **, int, int);
 int **fillGrid (int , int);
 bool isOver (int **tbl);
@@ -56,7 +57,8 @@ void fileScores (int);
 int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS); /**< Table to be used for game. */
-    TetrisTable tble(18,8);
+    TetrisTable tble;//(18,8);
+    UserObject blk;//(5,5);
     srand (time(NULL));
     int **object; /**< 2D ptr that user will be prompted with.*/
     bool game; /**< Bool check to end the game officially. */
@@ -104,10 +106,13 @@ int main(int argc, char** argv) {
                 destroy (object, THREE);
                 break;
             case 6:
-                object = objectNum1 (num, rowOb, colOb);
+                //UserObject blk(1,1);
+                object = objectNum1 (blk, num, rowOb, colOb);
                 spotChoice (spot, colOb);
                 objtPlcmnt(table, spot, rowOb, colOb, 6);
+                //blk.~UserObject();
                 destroy (object, rowOb);
+                break;
         }
         table = newTable (table, points);
         cout << " YOUR CURRENT POINTS ARE : " << points << " KEEP GOING!!\n\n";
@@ -387,10 +392,10 @@ int **objectNum (int num)
  * @param colOb an integer to save the column value.
  * @return the object chosen by integer number returns a 2D dynamic array.
  */
-int **objectNum1 (int num, int &rowOb, int &colOb)
+int **objectNum1 (UserObject &blk1, int num, int &rowOb, int &colOb)
 {
-    UserObj object ;//= new UserObj;
-    //UserObject block;
+    //UserObj object ;//= new UserObj;
+    UserObject blk;
     string valid;
     if (num == 6)
     {
@@ -399,8 +404,6 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
                 " you may enter is a 5x5." << endl;
         
         cout << "Enter a row(s) number between 1 n 5" << endl;
-    //for (int i = 0 ; i < 5; i ++)
-        int count=0;
         cin >> valid;
         while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
             valid != "5")
@@ -409,31 +412,30 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
             cin >> valid;
             //object.rows = realNum (valid[0]);
         }
-        object.rows = realNum (valid[0]);
+        //object.rows = realNum (valid[0]);
         int row = realNum (valid[0]);
-        //block.setRow(realNum(valid[0]));
+        blk.setRow(realNum(valid[0]));
         
         cout << "Enter a column(s) number between 1 n 5" << endl;
         cin >> valid;
-        
         while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
             valid != "5"){
             cout << "Only enter a number 1 thru 5!!!" << endl;
             cin >> valid;
         }
-        object.cols = realNum (valid[0]);
+        //object.cols = realNum (valid[0]);
         int col = realNum (valid[0]);
-        //block.setCol(realNum (valid[0]));
+        blk.setCol(realNum (valid[0]));
     //creating user object
-        UserObject block1(row, col);
-        block1.print();
-    object.ptr = new int *[object.rows];//rows
+        blk.createBlk();
+        blk.print();
+    /*object.ptr = new int *[object.rows];//rows
     for (int i = 0; i < object.rows; i++)//rows
     {
         object.ptr[i] = new int [object.cols];//cols
-    }
+    }*/
     //once created filling and outputting
-        cout << "\tThis is your block : " << endl;
+        /*cout << "\tThis is your block : " << endl;
         for (int i=0; i <object.rows; i++){//rows
             cout << "\t";
            for(int j=0; j <object.cols; j++){//cols
@@ -446,24 +448,22 @@ int **objectNum1 (int num, int &rowOb, int &colOb)
                   count = 0;
               }
            } 
+        }*/
+        rowOb = blk.getRow();
+        colOb = blk.getCol();
+        //int **copyptr = blk.getBlock();
+        /*for (int i=0;i<rowOb;i++){
+            copyptr[i] = new int [colOb];
         }
-        rowOb = object.rows;
-        colOb = object.cols;
-        /*for(int i=0;i<object.rows;i++)
-        {
-            delete []object.ptr[i];
-        }
-            delete []object.ptr;*/
-    //}
-        int** g = block1.getBlock();
-    return g;
-        for(int i=0; i<block1.getRow();i++){
-            for(int j =0; j<block1.getCol();j++){
-                cout << g[i][j] << "--" ;
+        
+        for (int i=0; i <rowOb;i++){
+            for (int j=0; j<colOb;j++){
+                copyptr[i][j] = 1;
             }
-            cout <<endl;
-        }
-    //return object.ptr;
+        }*/
+        
+    //return copyptr;
+    return blk.getBlock();
     }
 }
 /**
@@ -606,24 +606,14 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
  */
 int **newTable (int **tble, int &pts){
     int dstryRow =0; /**< Integer value of row where replacing happens.*/ 
-    int **newTble = fillGrid (ROWS, COLS);/**< Creating new table to copy.*/
+    
     int count=0;
-
-    for (int i =0; i < ROWS; i++){
+    //int **newTble = fillGrid (ROWS, COLS);/**< Creating new table to copy.*/
+    /*for (int i =0; i < ROWS; i++){
         for (int j =0; j < COLS; j++){
             newTble[i][j] = tble[i][j]; /**< Copying new table.*/
-        }
-    }
-    for (int i = 0; i < ROWS; i++)
-    {
-         if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
-                    tble[i][3] != 0 &&tble[i][4] != 0 &&tble[i][5] != 0 &&
-                    tble[i][6] != 0 &&tble[i][7] != 0)
-         {
-             count++;
-         }
-    }
-
+        //}
+    //}     
         for (int i = 0; i < ROWS; i++)
         {
             if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
@@ -633,17 +623,24 @@ int **newTable (int **tble, int &pts){
                 //count++;
                 pts += 10;
                 dstryRow=i;
-                //for (int i=row-1; i >= row-rowOb; i--)
-                //for (int i = ROWS-1; i >= 0; i--)
+                /**
+                 * Had to create table in loop or else same table was getting
+                 * copied this way new table gets copied with deleted row.
+                 */
+                int **newTble = fillGrid (ROWS, COLS);/**< Creating new table to copy.*/
+                for (int i =0; i < ROWS; i++){
+                    for (int j =0; j < COLS; j++){
+                        newTble[i][j] = tble[i][j]; /**< Copying new table.*/
+                    }
+                }
                 for (int k = 0; k < dstryRow; k++){
                      for (int j =0; j < COLS ; j++){
                           tble[k+1][j] = newTble[k][j];
                      }
-                }
-            }
-        }
-
-    destroy (newTble, ROWS);
+                }               
+                destroy (newTble, ROWS);
+            }          
+        }  
     return tble;
 }
 /**

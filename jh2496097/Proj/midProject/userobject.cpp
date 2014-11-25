@@ -7,10 +7,13 @@
 using namespace std;
 //constructors
 UserObject::UserObject(){
+    row = 1;
+    col = 1;
     object = new int *[row];
     for (int i=0; i <row;i++){
         object[i] = new int[col];
     }
+    fillObject();
 }
 UserObject::UserObject(int r, int c){
     col = c;
@@ -38,11 +41,19 @@ void UserObject::fillObject(){
  * the entire thing.
  */
 UserObject::~UserObject(){
+    cout << "CALLING DESTRUCTOR"<<endl;
     for(int i=0;i<row;i++)
     {
         delete []object[i];
     }
     delete []object;
+}
+void UserObject::createBlk(){
+    object = new int *[row];
+    for (int i=0; i <row;i++){
+        object[i] = new int[col];
+    }
+    fillObject();
 }
 int UserObject::getCol() const{
     return col;

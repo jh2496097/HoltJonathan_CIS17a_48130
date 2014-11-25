@@ -25,6 +25,7 @@ class TetrisTable{
         //getters
         int getRow()const{return row;}
         int getCol()const{return col;}
+        void placeBlock(int, int);
 };
 
 
