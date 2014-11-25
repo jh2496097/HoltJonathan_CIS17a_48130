@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/printblock.o \
 	${OBJECTDIR}/printtable.o \
 	${OBJECTDIR}/tettable.o \
 	${OBJECTDIR}/userobject.o
@@ -69,6 +70,11 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/printblock.o: printblock.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/printblock.o printblock.cpp
 
 ${OBJECTDIR}/printtable.o: printtable.cpp 
 	${MKDIR} -p ${OBJECTDIR}

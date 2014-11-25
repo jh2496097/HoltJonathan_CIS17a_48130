@@ -29,12 +29,6 @@ const int COLS = 8;
  */
 enum ObSpots {ONE = 1, TWO, THREE, FOUR, FIVE};/**< Enum value starting at 1.*/
 
-struct UserObj /**< Structure used to make object made by user.*/
-{
-    int **ptr;
-    int rows;
-    int cols;
-};
 struct Filetrack{/**< Structure that takes in names and scores from files.*/
     string name;
     int score;
@@ -49,6 +43,7 @@ bool isOver (int **tbl);
 void destroy (int**, int);
 //void objtPlcmnt(int **tble, int spot);
 void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num);
+void objtPlcmnt(int **tble, int spot, UserObject &, int num);
 int **newTable (int **tble, int &pts);
 void spotChoice (int &spot, int col);
 int realNum (int n);
@@ -58,7 +53,7 @@ int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS); /**< Table to be used for game. */
     TetrisTable tble;//(18,8);
-    UserObject blk;//(5,5);
+    //UserObject blk;//(5,5);
     srand (time(NULL));
     int **object; /**< 2D ptr that user will be prompted with.*/
     bool game; /**< Bool check to end the game officially. */
@@ -73,8 +68,10 @@ int main(int argc, char** argv) {
     do
     {
         int num = randObject ();
+        UserObject block;/**< User made block incorporated with a class.*/
         switch (num)
         {
+            
             case 1:
                 object = objectNum (num);
                 spotChoice (spot, TWO);
@@ -106,12 +103,10 @@ int main(int argc, char** argv) {
                 destroy (object, THREE);
                 break;
             case 6:
-                //UserObject blk(1,1);
-                object = objectNum1 (blk, num, rowOb, colOb);
+                object = objectNum1 (block, num, rowOb, colOb);
                 spotChoice (spot, colOb);
-                objtPlcmnt(table, spot, rowOb, colOb, 6);
-                //blk.~UserObject();
-                destroy (object, rowOb);
+                objtPlcmnt(table, spot, block, 6);
+                //destroy (object, rowOb);
                 break;
         }
         table = newTable (table, points);
@@ -387,15 +382,14 @@ int **objectNum (int num)
  * then a column size not allowing to be bigger than 5 or less than 1 for both.
  * Keeps track of row and column integers to be used for delete later.
  * @see objectNum().
- * @param num a random integer value used to pick object.
+ * @param blk class UserObject 
+ * @param num  a random integer value used to pick object.
  * @param rowOb an integer to save the row value.
  * @param colOb an integer to save the column value.
  * @return the object chosen by integer number returns a 2D dynamic array.
  */
-int **objectNum1 (UserObject &blk1, int num, int &rowOb, int &colOb)
+int **objectNum1 (UserObject &block, int num, int &rowOb, int &colOb)
 {
-    //UserObj object ;//= new UserObj;
-    UserObject blk;
     string valid;
     if (num == 6)
     {
@@ -414,7 +408,7 @@ int **objectNum1 (UserObject &blk1, int num, int &rowOb, int &colOb)
         }
         //object.rows = realNum (valid[0]);
         int row = realNum (valid[0]);
-        blk.setRow(realNum(valid[0]));
+        block.setRow(realNum(valid[0]));
         
         cout << "Enter a column(s) number between 1 n 5" << endl;
         cin >> valid;
@@ -425,45 +419,15 @@ int **objectNum1 (UserObject &blk1, int num, int &rowOb, int &colOb)
         }
         //object.cols = realNum (valid[0]);
         int col = realNum (valid[0]);
-        blk.setCol(realNum (valid[0]));
+        block.setCol(realNum (valid[0]));
     //creating user object
-        blk.createBlk();
-        blk.print();
-    /*object.ptr = new int *[object.rows];//rows
-    for (int i = 0; i < object.rows; i++)//rows
-    {
-        object.ptr[i] = new int [object.cols];//cols
-    }*/
-    //once created filling and outputting
-        /*cout << "\tThis is your block : " << endl;
-        for (int i=0; i <object.rows; i++){//rows
-            cout << "\t";
-           for(int j=0; j <object.cols; j++){//cols
-              object.ptr[i][j]= 1;
-              cout << object.ptr[i][j]  << "  ";
-              count++;
-              if (count == object.cols)
-              {
-                  cout <<  endl;
-                  count = 0;
-              }
-           } 
-        }*/
-        rowOb = blk.getRow();
-        colOb = blk.getCol();
-        //int **copyptr = blk.getBlock();
-        /*for (int i=0;i<rowOb;i++){
-            copyptr[i] = new int [colOb];
-        }
-        
-        for (int i=0; i <rowOb;i++){
-            for (int j=0; j<colOb;j++){
-                copyptr[i][j] = 1;
-            }
-        }*/
-        
-    //return copyptr;
-    return blk.getBlock();
+        block.createBlk();
+        block.print();
+    
+        rowOb = block.getRow();
+        colOb = block.getCol();
+
+    return block.getBlock();
     }
 }
 /**
@@ -582,6 +546,36 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
 
      for (int i=row-1; i >= row-rowOb; i--){
           for(int j=0; j < colOb; j++)  {
+              //checking if spot[col] top of table = 1 if so break from placing
+              //one
+              if (tble[0][col] != 0){
+                  //breaking from loop cycle
+                  break;
+              }
+              else
+               tble [i][j+spot-1] = num;                          
+          }                
+      }
+}
+void objtPlcmnt(int **tble, int spot, UserObject &block, int num)
+{
+    //columns
+    int col = spot-1;
+    int row = ROWS;
+    //starting from bottom left to top
+    for (int i = ROWS-1; i >= 0; i--){
+        for (int k = 0; k < block.getCol(); k++)
+        {
+           if (tble[i][col+k] != 0 )//||
+           {
+             //setting row
+             row = i;
+           }            
+        }
+     }
+
+     for (int i=row-1; i >= row-block.getRow(); i--){
+          for(int j=0; j < block.getCol(); j++)  {
               //checking if spot[col] top of table = 1 if so break from placing
               //one
               if (tble[0][col] != 0){

@@ -41,7 +41,7 @@ void UserObject::fillObject(){
  * the entire thing.
  */
 UserObject::~UserObject(){
-    cout << "CALLING DESTRUCTOR"<<endl;
+    //cout << "CALLING DESTRUCTOR"<<endl;
     for(int i=0;i<row;i++)
     {
         delete []object[i];
@@ -67,6 +67,10 @@ void UserObject::setCol(int c){
 void UserObject::setRow(int r){
     row  = r; 
 }
+/**
+ * This function gives user an idea of what the block looks like that the user
+ * had originally created dynamically.
+ */
 void UserObject::print() const{
     int count=0;
     cout << "\tThis is your block : " << endl;
