@@ -4,17 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>printblock.h</itemPath>
-      <itemPath>printtable.h</itemPath>
+      <itemPath>block.h</itemPath>
+      <itemPath>createblock.h</itemPath>
       <itemPath>tettable.h</itemPath>
       <itemPath>userobject.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>block.cpp</itemPath>
+      <itemPath>createblock.cpp</itemPath>
       <itemPath>names.txt</itemPath>
-      <itemPath>printblock.cpp</itemPath>
-      <itemPath>printtable.cpp</itemPath>
       <itemPath>scores.dat</itemPath>
       <itemPath>tettable.cpp</itemPath>
       <itemPath>userobject.cpp</itemPath>
@@ -47,17 +47,17 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="block.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="block.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="createblock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="createblock.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="names.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="printblock.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="printblock.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="printtable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="printtable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
       </item>
@@ -91,17 +91,17 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="block.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="block.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="createblock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="createblock.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="names.txt" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="printblock.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="printblock.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="printtable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="printtable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
       </item>

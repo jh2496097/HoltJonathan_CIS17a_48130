@@ -7,13 +7,14 @@
 
 #ifndef TETTABLE_H
 #define	TETTABLE_H
-
+#include "createblock.h"
 class TetrisTable{
     private:
         int **table;
         int row;
         int col;
         int **tble ();
+        CreateBlock b;
     public:
         //constructors
         TetrisTable();
@@ -25,7 +26,8 @@ class TetrisTable{
         //getters
         int getRow()const{return row;}
         int getCol()const{return col;}
-        void placeBlock(int, int);
+        int **getTable()const{return table;}
+        void placeBlock(int, CreateBlock &, int );
 };
 
 

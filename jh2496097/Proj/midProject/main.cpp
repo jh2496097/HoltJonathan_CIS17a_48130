@@ -14,7 +14,8 @@
 #include <fstream>
 #include "tettable.h"
 #include "userobject.h"
-
+#include "createblock.h"
+ 
 using namespace std;
 
 /**
@@ -35,30 +36,30 @@ struct Filetrack{/**< Structure that takes in names and scores from files.*/
 };
 void outputBegin ();
 int randObject ();
-int **objectNum (int num);
-int **objectNum1 (UserObject &,int num, int&, int&);
+int **objectNum (CreateBlock &, int num);
+int **objectNum1 (UserObject &,int num);
 void outputTbl(int **, int, int);
 int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
 //void objtPlcmnt(int **tble, int spot);
-void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num);
+void objtPlcmnt(int **tble, int spot, CreateBlock &, int num);
 void objtPlcmnt(int **tble, int spot, UserObject &, int num);
 int **newTable (int **tble, int &pts);
-void spotChoice (int &spot, int col);
+void spotChoice (int &spot, UserObject &);
+void spotChoice (int &spot, CreateBlock &);
 int realNum (int n);
 void fileScores (int);
 
 int main(int argc, char** argv) {
     //making table
     int **table = fillGrid (ROWS, COLS); /**< Table to be used for game. */
-    TetrisTable tble;//(18,8);
-    //UserObject blk;//(5,5);
+    //TetrisTable tble;//(18,8);
     srand (time(NULL));
     int **object; /**< 2D ptr that user will be prompted with.*/
     bool game; /**< Bool check to end the game officially. */
-    int rowOb =0; /**< Row size of object.*/
-    int colOb =0;/**< Column size of object.*/
+    //int rowOb =0; /**< Row size of object.*/
+    //int colOb =0;/**< Column size of object.*/
     int spot; /**< User choice of placement of objects.*/
     int points = 0;/**< Points to be tracked while playing. */
     
@@ -68,54 +69,48 @@ int main(int argc, char** argv) {
     do
     {
         int num = randObject ();
-        UserObject block;/**< User made block incorporated with a class.*/
+        UserObject u_block;/**< User made block incorporated with a class.*/
+        CreateBlock block;/**< pre-made block incorporated with a class.*/
         switch (num)
         {
             
             case 1:
-                object = objectNum (num);
-                spotChoice (spot, TWO);
-                objtPlcmnt(table, spot, TWO, TWO, 1);
-                destroy (object, TWO);
+                object = objectNum (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 1);
+                //destroy (object, TWO);
                 break;
             case 2:
-                object = objectNum (num);
-                spotChoice (spot, THREE);
-                objtPlcmnt(table, spot, ONE, THREE, 2);
-                destroy (object, ONE);
+                object = objectNum (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 2);
                 break;
             case 3:
-                object = objectNum (num);
-                spotChoice (spot, ONE);
-                objtPlcmnt(table, spot, FOUR, ONE, 3);
-                destroy (object, FOUR);
+                object = objectNum (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 3);
                 break;
             case 4:
-                object = objectNum (num);
-                spotChoice (spot, THREE);
-                objtPlcmnt(table, spot, TWO, THREE, 4);
-                destroy (object, TWO);
+                object = objectNum (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 4);
                 break;
             case 5:
-                object = objectNum (num);
-                spotChoice (spot, TWO);
-                objtPlcmnt(table, spot, THREE, TWO, 5);
-                destroy (object, THREE);
+                object = objectNum (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 5);
                 break;
             case 6:
-                object = objectNum1 (block, num, rowOb, colOb);
-                spotChoice (spot, colOb);
-                objtPlcmnt(table, spot, block, 6);
-                //destroy (object, rowOb);
+                object = objectNum1 (u_block, num);
+                spotChoice (spot, u_block);
+                objtPlcmnt(table, spot, u_block, 6);
                 break;
         }
         table = newTable (table, points);
         cout << " YOUR CURRENT POINTS ARE : " << points << " KEEP GOING!!\n\n";
         //int **object = objectNum (num);
         //spotChoice (spot, TWO);
-
         outputTbl(table, ROWS, COLS);
-        
         //checking if lost
         game = isOver(table);
 
@@ -210,7 +205,8 @@ void outputBegin ()
             << "Filling a whole row with any #'s will cause that row to be"
             " deleted and"<<endl << "points will be awarded. Continue playing"
             " till a number touches the" << endl <<"top row then game is over"
-            " and points will be saved." <<endl;
+            " and points will be saved. Bonus points \nfor multiple rows "
+            "completed at once."<<endl;
 }
 /**
  * destroy function is used to delete all of the dynamically created objects
@@ -244,16 +240,23 @@ int randObject ()
  * dynamically creates the object. Then outputs that object to the screen
  * for user to see what that dynamic 2D pointer looks like and then 
  * to be placed on table.
+ * @param blk class used to create a block for user 
  * @param num a random integer value used to pick object.
  * @return the object chosen by integer num returns a 2D dynamic array.
  */
-int **objectNum (int num)
+int **objectNum (CreateBlock &blk, int num)
 {
     int count =0;
+    
     int **object;
     if (num == 1)
     {
-        object=new int*[TWO];//rows
+        blk.setRow(TWO);
+        blk.setCol(TWO);
+        blk.makeBlock();
+        blk.print();
+        object = blk.getBlock();
+        /*object=new int*[TWO];//rows
         //creating 2D array
         for (int i=0; i < TWO;i++)//rows
         {
@@ -265,8 +268,6 @@ int **objectNum (int num)
             cout << "\t";
            for(int j=0; j <TWO; j++){//cols
               object[i][j]= 1;
-              // TRY AND FINE OUT THIS INDEX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              //cout << **(object+(i * COLS)+j)  << "  ";
               cout << object[i][j]  << "  ";
               count++;
               if (count == TWO)
@@ -275,103 +276,39 @@ int **objectNum (int num)
                   count = 0;
               }
            }
-        }
+        }*/
     }
     if (num == 2)
     {
-        object=new int*[ONE];//rows
-        //creating 2D array
-        for (int i=0; i < THREE;i++)//rows
-        {
-            object[i]=new int[THREE];//cols
-        }
-        //once created filling and outputting
-        cout << "\tThis is your block : " << endl  ;
-        for (int i=0; i <ONE; i++){//rows
-            cout << "\t";
-           for(int j=0; j <THREE; j++){//cols
-              object[i][j]= 1;
-              cout << object[i][j]  << "  ";
-              count++;
-              if (count == THREE)
-              {
-                  cout <<  endl;
-                  count = 0;
-              }
-           }
-        }
+        blk.setRow(ONE);
+        blk.setCol(THREE);
+        blk.makeBlock();
+        blk.print();
+        object = blk.getBlock();
     }
     if (num == 3)
     {
-        object=new int*[FOUR];//rows
-        //creating 2D array
-        for (int i=0; i < FOUR;i++)//rows
-        {
-            object[i]=new int[ONE];//cols
-        }
-        //once created filling and outputting
-        cout << "\tThis is your block : " << endl  ;
-        for (int i=0; i <FOUR; i++){//rows
-            cout << "\t";
-           for(int j=0; j <ONE; j++){//cols
-              object[i][j]= 1;
-              cout << object[i][j]  << "  ";
-              count++;
-              if (count == ONE)
-              {
-                  cout <<  endl;
-                  count = 0;
-              }
-           }
-        }
+        blk.setRow(FOUR);
+        blk.setCol(ONE);
+        blk.makeBlock();
+        blk.print();
+        object = blk.getBlock();
     }
     if (num == 4)
     {
-        object=new int*[TWO];//rows
-        //creating 2D array
-        for (int i=0; i < TWO;i++)//rows
-        {
-            object[i]=new int[THREE];//cols
-        }
-        //once created filling and outputting
-        cout << "\tThis is your block : " << endl  ;
-        for (int i=0; i < TWO; i++){//rows
-            cout << "\t";
-           for(int j=0; j < THREE; j++){//cols
-              object[i][j]= 1;
-              cout << object[i][j]  << "  ";
-              count++;
-              if (count == THREE)
-              {
-                  cout <<  endl;
-                  count = 0;
-              }
-           }
-        }
+        blk.setRow(TWO);
+        blk.setCol(THREE);
+        blk.makeBlock();
+        blk.print();
+        object = blk.getBlock();
     }
     if (num == 5)
     {
-        object=new int*[THREE];//rows
-        //creating 2D array
-        for (int i=0; i < THREE;i++)//rows
-        {
-            object[i]=new int[TWO];//cols
-        }
-        //once created filling and outputting
-        cout << "\tThis is your block : " << endl  ;
-        for (int i=0; i < THREE; i++){//rows
-            cout << "\t";
-           for(int j=0; j < TWO; j++){//cols
-              object[i][j]= 1;
-              cout << object[i][j]  << "  ";
-              count++;
-              if (count == TWO)
-              {
-                  cout <<  endl;
-                  count = 0;
-              }
-           }
-        }
+        blk.setRow(THREE);
+        blk.setCol(TWO);
+        blk.makeBlock();
+        blk.print();
+        object = blk.getBlock();
     }
     
     return object;
@@ -388,7 +325,7 @@ int **objectNum (int num)
  * @param colOb an integer to save the column value.
  * @return the object chosen by integer number returns a 2D dynamic array.
  */
-int **objectNum1 (UserObject &block, int num, int &rowOb, int &colOb)
+int **objectNum1 (UserObject &block, int num)
 {
     string valid;
     if (num == 6)
@@ -408,7 +345,7 @@ int **objectNum1 (UserObject &block, int num, int &rowOb, int &colOb)
         }
         //object.rows = realNum (valid[0]);
         int row = realNum (valid[0]);
-        block.setRow(realNum(valid[0]));
+        block.setRow(row);
         
         cout << "Enter a column(s) number between 1 n 5" << endl;
         cin >> valid;
@@ -419,13 +356,10 @@ int **objectNum1 (UserObject &block, int num, int &rowOb, int &colOb)
         }
         //object.cols = realNum (valid[0]);
         int col = realNum (valid[0]);
-        block.setCol(realNum (valid[0]));
+        block.setCol(col);
     //creating user object
         block.createBlk();
         block.print();
-    
-        rowOb = block.getRow();
-        colOb = block.getCol();
 
     return block.getBlock();
     }
@@ -436,9 +370,9 @@ int **objectNum1 (UserObject &block, int num, int &rowOb, int &colOb)
  * a string first thing converting it to an integer. The integer spot is 
  * referenced to be changed throughout the program. Returns nothing.
  * @param spot an integer value that represents spot to be placed on table.
- * @param col an integer value needed to check for bounds issues.
+ * @param b class used for col value needed to check for bounds issues.
  */
-void spotChoice (int &spot, int col){
+void spotChoice (int &spot, UserObject &b){
     string choice;
     cout << "Pick a spot to place object (1 to 8): " ;
     cin >> choice;
@@ -453,7 +387,37 @@ void spotChoice (int &spot, int col){
     //IMPORTANT BOUNDS CHECKING AND PLACEMENT
     //first area checks spot choice compared to column size of object
     //rest makes sure number is 1 - 8
-    while ((spot-1) + col > 8 || spot < 1 || spot > 8&&choice != "1"
+    while ((spot-1) + b.getCol() > 8 || spot < 1 || spot > 8&&choice != "1"
+            &&choice != "2" &&choice != "3" &&choice != "4" &&
+            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
+         cout << "Over Bounds will occur!!!!" << endl;
+         cout << "Cannot place there please pick another:" << endl;
+         cin >> choice;
+         
+         spot =  realNum (choice[0]);
+    }
+}
+/**
+ * same as above
+ * @param spot an integer value that represents spot to be placed on table.
+ * @param b class used for col value needed to check for bounds issues.
+ */
+void spotChoice (int &spot, CreateBlock &b){
+    string choice;
+    cout << "Pick a spot to place object (1 to 8): " ;
+    cin >> choice;
+    while (choice != "1" &&choice != "2" &&choice != "3" &&choice != "4" &&
+            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8")
+    {
+        cout << "Only enter a number 1 thru 8!!!" << endl;
+        cin >> choice;
+    }
+    spot =  realNum (choice[0]);
+    //cout << "SPOT: "  << spot << "SPPOT!!"<<endl;
+    //IMPORTANT BOUNDS CHECKING AND PLACEMENT
+    //first area checks spot choice compared to column size of object
+    //rest makes sure number is 1 - 8
+    while ((spot-1) + b.getCol() > 8 || spot < 1 || spot > 8&&choice != "1"
             &&choice != "2" &&choice != "3" &&choice != "4" &&
             choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
          cout << "Over Bounds will occur!!!!" << endl;
@@ -523,18 +487,17 @@ bool isOver (int **tbl)
  * bounds when placing an object.
  * @param tble 2D table.
  * @param spot integer value entered by user.
- * @param rowOb integer row size of object.
- * @param colOb integer column size of object.
+ * @param b class block used for rows and cols of block
  * @param num integer value to represent numbers in the object.
  */
-void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
+void objtPlcmnt(int **tble, int spot, CreateBlock &b, int num)
 {
     //columns
     int col = spot-1;
     int row = ROWS;
     //starting from bottom left to top
     for (int i = ROWS-1; i >= 0; i--){
-        for (int k = 0; k < colOb; k++)
+        for (int k = 0; k < b.getCol(); k++)
         {
          if (tble[i][col+k] != 0 )//||
          {
@@ -544,8 +507,8 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
         }
      }
 
-     for (int i=row-1; i >= row-rowOb; i--){
-          for(int j=0; j < colOb; j++)  {
+     for (int i=row-1; i >= row-b.getRow(); i--){
+          for(int j=0; j < b.getCol(); j++)  {
               //checking if spot[col] top of table = 1 if so break from placing
               //one
               if (tble[0][col] != 0){
@@ -556,7 +519,14 @@ void objtPlcmnt(int **tble, int spot, int rowOb, int colOb, int num)
                tble [i][j+spot-1] = num;                          
           }                
       }
-}
+} 
+/**
+ * same as above
+ * @param tble 2D table.
+ * @param spot integer value entered by user.
+ * @param block class block used for rows and cols of block
+ * @param num integer value to represent numbers in the object.
+ */
 void objtPlcmnt(int **tble, int spot, UserObject &block, int num)
 {
     //columns
@@ -600,22 +570,24 @@ void objtPlcmnt(int **tble, int spot, UserObject &block, int num)
  */
 int **newTable (int **tble, int &pts){
     int dstryRow =0; /**< Integer value of row where replacing happens.*/ 
-    
-    int count=0;
-    //int **newTble = fillGrid (ROWS, COLS);/**< Creating new table to copy.*/
-    /*for (int i =0; i < ROWS; i++){
-        for (int j =0; j < COLS; j++){
-            newTble[i][j] = tble[i][j]; /**< Copying new table.*/
-        //}
-    //}     
+    int count=0;/**< Integer value of number of rows filled at a time.*/ 
+  
+    for (int i = 0; i < ROWS; i++) {
+            if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
+                    tble[i][3] != 0 &&tble[i][4] != 0 &&tble[i][5] != 0 &&
+                    tble[i][6] != 0 &&tble[i][7] != 0)
+            {
+                count++;
+            }
+    }
+    cout << "YOU GOT " << count << " ROWS AT ONCE."<<endl;
         for (int i = 0; i < ROWS; i++)
         {
             if (tble[i][0] != 0 && tble[i][1] != 0 &&tble[i][2] != 0 &&
                     tble[i][3] != 0 &&tble[i][4] != 0 &&tble[i][5] != 0 &&
                     tble[i][6] != 0 &&tble[i][7] != 0)
-            {
-                //count++;
-                pts += 10;
+            {                
+                pts += 10*count;
                 dstryRow=i;
                 /**
                  * Had to create table in loop or else same table was getting

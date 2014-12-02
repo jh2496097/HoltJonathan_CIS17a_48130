@@ -68,3 +68,44 @@ int **TetrisTable::tble(){
     }
     return table;
 }
+/**
+ * The function objtPlcmnt is first going take 2D table then since object is
+ * of a certain size looking at size of column spots to check for a #. If there
+ * is a # in either spot i set rows to that spot to then place object on top 
+ * of the numbers in table. Uses a break statement to break from going over
+ * bounds when placing an object.
+ * @param spot user picked spot of user
+ * @param b aggregation of a class to use placement of block
+ * @param num number represented with block
+ */
+void TetrisTable::placeBlock(int spot, CreateBlock &b, int num){
+    //column choice of user
+    int userChoice = spot-1;
+    //int rows = row;
+    //bRow = b.getRow();
+    //bCol = b.getCol();
+    //starting from bottom left to top
+    for (int i = row-1; i >= 0; i--){
+        for (int k = 0; k < b.getCol(); k++)
+        {
+           if (table[i][userChoice+k] != 0 )//||
+           {
+             //setting row
+             row = i;
+           }            
+        }
+     }
+
+     for (int i=row-1; i >= row-b.getRow(); i--){
+          for(int j=0; j < b.getCol(); j++)  {
+              //checking if spot[col] top of table = 1 if so break from placing
+              //one
+              if (table[0][col] != 0){
+                  //breaking from loop cycle
+                  break;
+              }
+              else
+               table [i][j+userChoice] = num;                          
+          }                
+      }
+}

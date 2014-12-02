@@ -35,9 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/block.o \
+	${OBJECTDIR}/createblock.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/printblock.o \
-	${OBJECTDIR}/printtable.o \
 	${OBJECTDIR}/tettable.o \
 	${OBJECTDIR}/userobject.o
 
@@ -66,20 +66,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/midproject.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/midproject ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/block.o: block.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/block.o block.cpp
+
+${OBJECTDIR}/createblock.o: createblock.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/createblock.o createblock.cpp
+
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/printblock.o: printblock.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/printblock.o printblock.cpp
-
-${OBJECTDIR}/printtable.o: printtable.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/printtable.o printtable.cpp
 
 ${OBJECTDIR}/tettable.o: tettable.cpp 
 	${MKDIR} -p ${OBJECTDIR}
