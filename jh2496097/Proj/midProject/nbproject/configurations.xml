@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>absblock.h</itemPath>
       <itemPath>block.h</itemPath>
       <itemPath>createblock.h</itemPath>
       <itemPath>tettable.h</itemPath>
@@ -11,6 +12,7 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>binFile.dat</itemPath>
       <itemPath>block.cpp</itemPath>
       <itemPath>createblock.cpp</itemPath>
       <itemPath>names.txt</itemPath>
@@ -45,6 +47,10 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="absblock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="binFile.dat" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="block.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="block.h" ex="false" tool="3" flavor2="0">
@@ -85,6 +91,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="absblock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="binFile.dat" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="block.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="block.h" ex="false" tool="3" flavor2="0">

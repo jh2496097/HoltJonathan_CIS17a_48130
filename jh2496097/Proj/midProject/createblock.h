@@ -9,7 +9,7 @@
 #define	CREATEBLOCK_H
 
 #include "block.h"
-
+//Derived class from block
 class CreateBlock : public Block{
     private:
         int **block;
@@ -19,7 +19,7 @@ class CreateBlock : public Block{
         CreateBlock (int,int); 
         ~CreateBlock();
         void makeBlock();
-        void print()const;
+        void print(Block &);
         int **getBlock()const {return block;};
 };
 

@@ -7,8 +7,8 @@
 
 #ifndef BLOCK_H
 #define	BLOCK_H
-
-class Block{
+#include "absblock.h"
+class Block: public AbsBlock{
     private:
         int row;
         int col;
@@ -19,8 +19,8 @@ class Block{
         Block (int, int);
         void setRow (int);
         void setCol (int);
-        int getRow()const{return row;}
-        int getCol()const{return col;}
+        int getRow(){return row;}
+        int getCol(){return col;}
 };
 
 #endif	/* BLOCK_H */

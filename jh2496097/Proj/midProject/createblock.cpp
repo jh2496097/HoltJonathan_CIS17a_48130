@@ -14,19 +14,10 @@ CreateBlock::CreateBlock(){
     }
     fillBlock();
 }
-CreateBlock::CreateBlock(int r, int c){
-    if (r < 1)
-        throw BadRow();
-    else
-        setRow (r);
-    if (c < 1)
-        throw BadCol();
-    else
-        setCol(c);
-    
-    block = new int *[getRow()];
-    for (int i=0; i < getRow();i++){
-        block[i] = new int [getCol()];
+CreateBlock::CreateBlock(int r, int c):Block(r, c){
+    block = new int *[r];
+    for (int i=0; i < r;i++){
+        block[i] = new int [c];
     }
     fillBlock();
 }
@@ -61,16 +52,17 @@ void CreateBlock::makeBlock(){
     }
     fillBlock();
 }
-void CreateBlock::print() const{
+//polymoyphism
+void CreateBlock::print(Block &b) {
     int count=0;
     cout << "\tThis is your block : " << endl;
-        for (int i=0; i <getRow(); i++){//rows
+        for (int i=0; i <b.getRow(); i++){//rows
             cout << "\t";
-           for(int j=0; j <getCol(); j++){//cols
+           for(int j=0; j <b.getCol(); j++){//cols
               block[i][j]= 1;
               cout << block[i][j]  << "  ";
               count++;
-              if (count == getCol())
+              if (count == b.getCol())
               {
                   cout <<  endl;
                   count = 0;

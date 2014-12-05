@@ -28,6 +28,7 @@ class TetrisTable{
         int getCol()const{return col;}
         int **getTable()const{return table;}
         void placeBlock(int, CreateBlock &, int );
+        void outputTable ()const;
 };
 
 

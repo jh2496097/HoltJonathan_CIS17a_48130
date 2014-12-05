@@ -4,6 +4,9 @@
 
 
 #include "tettable.h"
+#include <string>
+#include <iostream>
+using namespace std;
 //constructor
 TetrisTable::TetrisTable(){
     table = new int *[row];
@@ -109,4 +112,31 @@ void TetrisTable::placeBlock(int spot, CreateBlock &b, int num){
                table [i][j+userChoice] = num;                          
           }                
       }
+}
+/**
+ * This function is used to output the 2D table to the console that user will
+ * be interacting with by placing objects in it. Outputs this table constantly
+ * so user can always see it.
+ * @param ptr 2D pointer.
+ * @param rows size for rows.
+ * @param cols size for columns.
+ */
+void TetrisTable::outputTable() const{
+    int count = 0;
+    for (int i = 0; i < row; i++)
+    {
+        cout << "\t\t";
+        for(int j = 0; j < col; j++)
+        {
+            cout << table[i][j] << "   ";
+            count++;
+            if (count == col)
+            {
+                cout << endl;
+                count = 0; 
+            }
+        }
+    }
+    cout << "\t    -------------------------------------" << endl;
+    cout << "Columns \t1   2   3   4   5   6   7   8     "<< endl<<endl;
 }

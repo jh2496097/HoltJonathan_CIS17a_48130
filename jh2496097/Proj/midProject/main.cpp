@@ -42,9 +42,7 @@ int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
 void objtPlcmnt(int **tble, int spot, CreateBlock &, int num);
-//void objtPlcmnt(int **tble, int spot, UserObject &, int num);
 int **newTable (int **tble, int &pts);
-//void spotChoice (int &spot, UserObject &);
 void spotChoice (int &spot, CreateBlock &);
 int realNum (int n);
 void fileScores (int);
@@ -56,8 +54,6 @@ int main(int argc, char** argv) {
     srand (time(NULL));
     int **object; /**< 2D ptr that user will be prompted with.*/
     bool game; /**< Bool check to end the game officially. */
-    //int rowOb =0; /**< Row size of object.*/
-    //int colOb =0;/**< Column size of object.*/
     int spot; /**< User choice of placement of objects.*/
     int points = 0;/**< Points to be tracked while playing. */
     
@@ -101,6 +97,36 @@ int main(int argc, char** argv) {
                 object = objectNum1 (block, num);
                 spotChoice (spot, block);
                 objtPlcmnt(table, spot, block, 6);
+                break;
+            case 7:
+                /**object = new int [3];
+                for (int i=0; i < 3;i++){
+                    object[i] = new int [2];
+                }
+
+                object[0][0]= 1;
+                object[0][1]= 0;
+                object[1][0]= 1;
+                object[1][1]= 1;
+                object[2][0]= 0;
+                object[2][1]= 1;
+ 
+                cout << "\tThis is your block : " << endl;
+                for (int i=0; i <3; i++){//rows
+                    cout << "\t";
+                    for(int j=0; j <2; j++){//cols
+                        cout << object[i][j]  << "  ";
+                             
+                    } cout <<  endl; 
+                }
+         for(int i=0;i<3;i++)
+         {
+             delete []object[i];
+         }
+                 delete []object;
+                //object = objectNum1 (block, num);
+                //spotChoice (spot, block);
+                //objtPlcmnt(table, spot, block, 7);*/
                 break;
         }
         table = newTable (table, points);
@@ -181,19 +207,49 @@ int **fillGrid (int ROWS, int COLS)
  */
 void outputBegin ()
 {
-    cout << "    /---------- /|" << endl;
-    cout << "  /___________ / | " << endl;
-    cout << " |            |  | " << endl;
-    cout << " |            |  /             __ " << endl;
-    cout << " |----    ----| /          ___|  |____          ( )" << endl;
-    cout << "     |    | |   /------\\  |          |  ______   __ " << endl;
-    cout << "     |    | |  |   ___ |  |          | |   ___| |  |   /------|\n"; 
-    cout << "     |    | |  |  |___|    ---|  |---  |  /     |  |  /   /_--|\n"; 
-  cout << "     |    | |  \\  \\______     |  |     |  |     |  |  |_____ \\\n"; 
-    cout << "     |    | |   \\________/    |  |     |  |     |  |  _____/ |\n"; 
-    cout << "     |____|/                   __      |__|     |__| |______/\n"; 
-    cout << endl << endl;
-    
+    string str1= "    /---------- /|" ;//<< endl;
+    string str2= "  /___________ / | " ;//<< endl;
+    string str3= " |            |  | " ;//<< endl;
+    string str4= " |            |  /             __ " ;//<< endl;
+    string str5= " |----    ----| /          ___|  |____          ( )" ;//<< endl;
+    string str6= "     |    | |   /------\\  |          |  ______   __ " ;//<< endl;
+    string str7= "     |    | |  |   ___ |  |          | |   ___| |  |   /------|";//\n"; 
+    string str8= "     |    | |  |  |___|    ---|  |---  |  /     |  |  /   /_--|";//\n"; 
+  string str9= "     |    | |  \\  \\______     |  |     |  |     |  |  |_____ \\";//\n"; 
+    string str10= "     |    | |   \\________/    |  |     |  |     |  |  _____/ |";//\n"; 
+    string str11= "     |____|/                   __      |__|     |__| |______/";//\n"; 
+    fstream file;
+    file.open("binFile.dat", ios::out | ios::binary);
+    cout << "Writing to file..."<<endl;
+    file.write(reinterpret_cast<char *> (&str1), sizeof(str1));
+    file.write(reinterpret_cast<char *> (&str2), sizeof(str2));
+    file.write(reinterpret_cast<char *> (&str3), sizeof(str3));
+    file.write(reinterpret_cast<char *> (&str4), sizeof(str4));
+    file.write(reinterpret_cast<char *> (&str5), sizeof(str5));
+    file.write(reinterpret_cast<char *> (&str6), sizeof(str6));
+    file.write(reinterpret_cast<char *> (&str7), sizeof(str7));
+    file.write(reinterpret_cast<char *> (&str8), sizeof(str8));
+    file.write(reinterpret_cast<char *> (&str9), sizeof(str9));
+    file.write(reinterpret_cast<char *> (&str10), sizeof(str10));
+    file.write(reinterpret_cast<char *> (&str11), sizeof(str11));
+    file.close();
+    file.open("binFile.dat", ios::in | ios::binary);
+    cout << "Reading from the file..."<<endl;
+    file.read(reinterpret_cast<char *> (&str1), sizeof(str1));
+    file.read(reinterpret_cast<char *> (&str2), sizeof(str2));
+    file.read(reinterpret_cast<char *> (&str3), sizeof(str3));
+    file.read(reinterpret_cast<char *> (&str4), sizeof(str4));
+    file.read(reinterpret_cast<char *> (&str5), sizeof(str5));
+    file.read(reinterpret_cast<char *> (&str6), sizeof(str6));
+    file.read(reinterpret_cast<char *> (&str7), sizeof(str7));
+    file.read(reinterpret_cast<char *> (&str8), sizeof(str8));
+    file.read(reinterpret_cast<char *> (&str9), sizeof(str9));
+    file.read(reinterpret_cast<char *> (&str10), sizeof(str10));
+    file.read(reinterpret_cast<char *> (&str11), sizeof(str11));
+    cout << str1 <<endl <<str2<< endl<<str3<< endl<<str4<< endl<<str5<< endl
+            <<str6<< endl<<str7<< endl<<str8<< endl<<str9<< endl<<str10<< endl
+            <<str11<<endl<<endl;
+    file.close();
     cout << "This is a console based tetris game." << endl << "The console is"
             " going to constantly output a table at the user" << endl << "and"
             " the user will be prompted with an object/tetris cube." << endl <<
@@ -203,7 +259,10 @@ void outputBegin ()
             " deleted and"<<endl << "points will be awarded. Continue playing"
             " till a number touches the" << endl <<"top row then game is over"
             " and points will be saved. Bonus points \nfor multiple rows "
-            "completed at once."<<endl;
+            "completed at once. Imagine that the blocks get dropped"<<endl<<
+            "automatically from the top of the column of your choice down to"
+            " where it"<<endl<< "either stacks or falls to the very bottom."
+            "\n\n";
 }
 /**
  * destroy function is used to delete all of the dynamically created objects
@@ -229,7 +288,7 @@ void destroy(int **array,int rows)
 int randObject ()
 {
     int num;
-    num = rand()%6+1;
+    num = rand()%7+1;
     return num;
 }
 /**
@@ -251,7 +310,7 @@ int **objectNum (CreateBlock &blk, int num)
         blk.setRow(TWO);
         blk.setCol(TWO);
         blk.makeBlock();
-        blk.print();
+        blk.print(blk);
         object = blk.getBlock();
         /*object=new int*[TWO];//rows
         //creating 2D array
@@ -280,7 +339,7 @@ int **objectNum (CreateBlock &blk, int num)
         blk.setRow(ONE);
         blk.setCol(THREE);
         blk.makeBlock();
-        blk.print();
+        blk.print(blk);
         object = blk.getBlock();
     }
     if (num == 3)
@@ -288,7 +347,7 @@ int **objectNum (CreateBlock &blk, int num)
         blk.setRow(FOUR);
         blk.setCol(ONE);
         blk.makeBlock();
-        blk.print();
+        blk.print(blk);
         object = blk.getBlock();
     }
     if (num == 4)
@@ -296,7 +355,7 @@ int **objectNum (CreateBlock &blk, int num)
         blk.setRow(TWO);
         blk.setCol(THREE);
         blk.makeBlock();
-        blk.print();
+        blk.print(blk);
         object = blk.getBlock();
     }
     if (num == 5)
@@ -304,8 +363,34 @@ int **objectNum (CreateBlock &blk, int num)
         blk.setRow(THREE);
         blk.setCol(TWO);
         blk.makeBlock();
-        blk.print();
+        blk.print(blk);
         object = blk.getBlock();
+    }
+    if (num == 7){
+        *object = new int [3];
+        for (int i=0; i < 3;i++){
+            object[i] = new int [2];
+        }
+        cout << "num:"<<num<<endl;
+        object[0][0]= 1;
+        object[0][1]= 0;
+        object[1][0]= 1;
+        object[1][1]= 1;
+        object[2][0]= 0;
+        object[2][1]= 1;
+        cout << "num:"<<num<<endl;
+        cout << "\tThis is your block : " << endl;
+        for (int i=0; i <3; i++){//rows
+            cout << "\t";
+           for(int j=0; j <2; j++){//cols
+              //object[i][j]= 1;
+              cout << object[i][j]  << "  ";
+                  
+                  count = 0;
+             
+           } cout <<  endl;
+        }
+        cout << "num:"<<num<<endl;
     }
     
     return object;
@@ -356,7 +441,7 @@ int **objectNum1 (CreateBlock &block, int num)
         block.setCol(col);
     //creating user object
         block.makeBlock();
-        block.print();
+        block.print(block);
 
     return block.getBlock();
     }
