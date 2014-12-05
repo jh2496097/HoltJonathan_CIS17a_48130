@@ -12,6 +12,7 @@ TetrisTable::TetrisTable(){
     }
 }
 TetrisTable::TetrisTable(int r, int c){
+    //get an execption in here
     if (r>0)
         row=r;
     if (c>0)
@@ -100,7 +101,7 @@ void TetrisTable::placeBlock(int spot, CreateBlock &b, int num){
           for(int j=0; j < b.getCol(); j++)  {
               //checking if spot[col] top of table = 1 if so break from placing
               //one
-              if (table[0][col] != 0){
+              if (table[0][userChoice] != 0){
                   //breaking from loop cycle
                   break;
               }

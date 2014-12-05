@@ -1,10 +1,10 @@
-build/Debug/Cygwin-Windows/main.o: main.cpp tettable.h userobject.h \
- createblock.h block.h
+build/Debug/Cygwin-Windows/main.o: main.cpp tettable.h createblock.h \
+ block.h userobject.h
 
 tettable.h:
-
-userobject.h:
 
 createblock.h:
 
 block.h:
+
+userobject.h:

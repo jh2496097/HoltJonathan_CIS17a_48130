@@ -38,8 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/block.o \
 	${OBJECTDIR}/createblock.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/tettable.o \
-	${OBJECTDIR}/userobject.o
+	${OBJECTDIR}/tettable.o
 
 
 # C Compiler Flags
@@ -85,11 +84,6 @@ ${OBJECTDIR}/tettable.o: tettable.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/tettable.o tettable.cpp
-
-${OBJECTDIR}/userobject.o: userobject.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/userobject.o userobject.cpp
 
 # Subprojects
 .build-subprojects:

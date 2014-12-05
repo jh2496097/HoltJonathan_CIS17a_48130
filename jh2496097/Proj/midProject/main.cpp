@@ -13,7 +13,6 @@
 #include <ctime>
 #include <fstream>
 #include "tettable.h"
-#include "userobject.h"
 #include "createblock.h"
  
 using namespace std;
@@ -37,16 +36,15 @@ struct Filetrack{/**< Structure that takes in names and scores from files.*/
 void outputBegin ();
 int randObject ();
 int **objectNum (CreateBlock &, int num);
-int **objectNum1 (UserObject &,int num);
+int **objectNum1 (CreateBlock &,int num);
 void outputTbl(int **, int, int);
 int **fillGrid (int , int);
 bool isOver (int **tbl);
 void destroy (int**, int);
-//void objtPlcmnt(int **tble, int spot);
 void objtPlcmnt(int **tble, int spot, CreateBlock &, int num);
-void objtPlcmnt(int **tble, int spot, UserObject &, int num);
+//void objtPlcmnt(int **tble, int spot, UserObject &, int num);
 int **newTable (int **tble, int &pts);
-void spotChoice (int &spot, UserObject &);
+//void spotChoice (int &spot, UserObject &);
 void spotChoice (int &spot, CreateBlock &);
 int realNum (int n);
 void fileScores (int);
@@ -69,7 +67,6 @@ int main(int argc, char** argv) {
     do
     {
         int num = randObject ();
-        UserObject u_block;/**< User made block incorporated with a class.*/
         CreateBlock block;/**< pre-made block incorporated with a class.*/
         switch (num)
         {
@@ -101,9 +98,9 @@ int main(int argc, char** argv) {
                 objtPlcmnt(table, spot, block, 5);
                 break;
             case 6:
-                object = objectNum1 (u_block, num);
-                spotChoice (spot, u_block);
-                objtPlcmnt(table, spot, u_block, 6);
+                object = objectNum1 (block, num);
+                spotChoice (spot, block);
+                objtPlcmnt(table, spot, block, 6);
                 break;
         }
         table = newTable (table, points);
@@ -325,7 +322,7 @@ int **objectNum (CreateBlock &blk, int num)
  * @param colOb an integer to save the column value.
  * @return the object chosen by integer number returns a 2D dynamic array.
  */
-int **objectNum1 (UserObject &block, int num)
+int **objectNum1 (CreateBlock &block, int num)
 {
     string valid;
     if (num == 6)
@@ -334,7 +331,7 @@ int **objectNum1 (UserObject &block, int num)
                 " an object of their own choice." << endl << "The max size" 
                 " you may enter is a 5x5." << endl;
         
-        cout << "Enter a row(s) number between 1 n 5" << endl;
+        cout << "Enter a row(s) number between 1 n 5 (height)" << endl;
         cin >> valid;
         while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
             valid != "5")
@@ -347,7 +344,7 @@ int **objectNum1 (UserObject &block, int num)
         int row = realNum (valid[0]);
         block.setRow(row);
         
-        cout << "Enter a column(s) number between 1 n 5" << endl;
+        cout << "Enter a column(s) number between 1 n 5 (width)" << endl;
         cin >> valid;
         while (valid != "1" &&valid != "2" &&valid!= "3" &&valid != "4" &&
             valid != "5"){
@@ -358,7 +355,7 @@ int **objectNum1 (UserObject &block, int num)
         int col = realNum (valid[0]);
         block.setCol(col);
     //creating user object
-        block.createBlk();
+        block.makeBlock();
         block.print();
 
     return block.getBlock();
@@ -369,36 +366,6 @@ int **objectNum1 (UserObject &block, int num)
  * where they wish to place their object. Checks for user validation by taking
  * a string first thing converting it to an integer. The integer spot is 
  * referenced to be changed throughout the program. Returns nothing.
- * @param spot an integer value that represents spot to be placed on table.
- * @param b class used for col value needed to check for bounds issues.
- */
-void spotChoice (int &spot, UserObject &b){
-    string choice;
-    cout << "Pick a spot to place object (1 to 8): " ;
-    cin >> choice;
-    while (choice != "1" &&choice != "2" &&choice != "3" &&choice != "4" &&
-            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8")
-    {
-        cout << "Only enter a number 1 thru 8!!!" << endl;
-        cin >> choice;
-    }
-    spot =  realNum (choice[0]);
-    //cout << "SPOT: "  << spot << "SPPOT!!"<<endl;
-    //IMPORTANT BOUNDS CHECKING AND PLACEMENT
-    //first area checks spot choice compared to column size of object
-    //rest makes sure number is 1 - 8
-    while ((spot-1) + b.getCol() > 8 || spot < 1 || spot > 8&&choice != "1"
-            &&choice != "2" &&choice != "3" &&choice != "4" &&
-            choice != "5" &&choice != "6" &&choice != "7" &&choice != "8"){
-         cout << "Over Bounds will occur!!!!" << endl;
-         cout << "Cannot place there please pick another:" << endl;
-         cin >> choice;
-         
-         spot =  realNum (choice[0]);
-    }
-}
-/**
- * same as above
  * @param spot an integer value that represents spot to be placed on table.
  * @param b class used for col value needed to check for bounds issues.
  */
@@ -520,43 +487,6 @@ void objtPlcmnt(int **tble, int spot, CreateBlock &b, int num)
           }                
       }
 } 
-/**
- * same as above
- * @param tble 2D table.
- * @param spot integer value entered by user.
- * @param block class block used for rows and cols of block
- * @param num integer value to represent numbers in the object.
- */
-void objtPlcmnt(int **tble, int spot, UserObject &block, int num)
-{
-    //columns
-    int col = spot-1;
-    int row = ROWS;
-    //starting from bottom left to top
-    for (int i = ROWS-1; i >= 0; i--){
-        for (int k = 0; k < block.getCol(); k++)
-        {
-           if (tble[i][col+k] != 0 )//||
-           {
-             //setting row
-             row = i;
-           }            
-        }
-     }
-
-     for (int i=row-1; i >= row-block.getRow(); i--){
-          for(int j=0; j < block.getCol(); j++)  {
-              //checking if spot[col] top of table = 1 if so break from placing
-              //one
-              if (tble[0][col] != 0){
-                  //breaking from loop cycle
-                  break;
-              }
-              else
-               tble [i][j+spot-1] = num;                          
-          }                
-      }
-}
 /**
  * This function newTable is designed to act as the point system for the game. 
  * It creates a new dynamic 2D table and then copies the one currently being

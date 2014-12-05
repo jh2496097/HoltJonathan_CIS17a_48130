@@ -7,7 +7,6 @@
       <itemPath>block.h</itemPath>
       <itemPath>createblock.h</itemPath>
       <itemPath>tettable.h</itemPath>
-      <itemPath>userobject.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -17,7 +16,6 @@
       <itemPath>names.txt</itemPath>
       <itemPath>scores.dat</itemPath>
       <itemPath>tettable.cpp</itemPath>
-      <itemPath>userobject.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -65,10 +63,6 @@
       </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="userobject.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="userobject.h" ex="false" tool="3" flavor2="0">
-      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -108,10 +102,6 @@
       <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="userobject.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="userobject.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
