@@ -12,14 +12,16 @@
 //Derived class from block
 class CreateBlock : public Block{
     private:
-        int **block;
+        int **block;/**< 2D ptr that user will be prompted with.*/
         void fillBlock();
+        int num;
     public:
         CreateBlock();
         CreateBlock (int,int); 
         ~CreateBlock();
+        void rotateBlock(Block &);
         void makeBlock();
-        void print(Block &);
+        void print(Block &,int);
         int **getBlock()const {return block;};
 };
 

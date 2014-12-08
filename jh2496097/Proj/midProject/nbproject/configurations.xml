@@ -17,7 +17,6 @@
       <itemPath>createblock.cpp</itemPath>
       <itemPath>names.txt</itemPath>
       <itemPath>scores.dat</itemPath>
-      <itemPath>tettable.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -65,8 +64,6 @@
       </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
@@ -108,8 +105,6 @@
       <item path="names.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="scores.dat" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tettable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tettable.h" ex="false" tool="3" flavor2="0">
       </item>

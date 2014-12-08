@@ -14,6 +14,7 @@ CreateBlock::CreateBlock(){
     }
     fillBlock();
 }
+///derived class of base class block
 CreateBlock::CreateBlock(int r, int c):Block(r, c){
     block = new int *[r];
     for (int i=0; i < r;i++){
@@ -52,14 +53,19 @@ void CreateBlock::makeBlock(){
     }
     fillBlock();
 }
-//polymoyphism
-void CreateBlock::print(Block &b) {
+/**
+ * Function used to print the block and is outputted to the user to be prompted
+ * to place on the table for playing
+ * @param b class block used needed columns and rows
+ */
+//polymorphism
+void CreateBlock::print(Block &b, int num) {
     int count=0;
     cout << "\tThis is your block : " << endl;
         for (int i=0; i <b.getRow(); i++){//rows
             cout << "\t";
            for(int j=0; j <b.getCol(); j++){//cols
-              block[i][j]= 1;
+              block[i][j]= num;
               cout << block[i][j]  << "  ";
               count++;
               if (count == b.getCol())

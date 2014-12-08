@@ -13,6 +13,7 @@ class Block: public AbsBlock{
         int row;
         int col;
     public:
+        //exceptions
         class BadRow{};
         class BadCol{};
         Block ();
